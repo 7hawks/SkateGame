@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/fonts.spritefont</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/pavement.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/pixelMan.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/pixelManSquare.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/pray.jpg</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skatePop.wav</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/Skater.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/SkaterDown.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/SkaterDownLeft.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/SkaterDownRight.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/SkaterLeft.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/SkaterUp.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/smileyBlue.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
