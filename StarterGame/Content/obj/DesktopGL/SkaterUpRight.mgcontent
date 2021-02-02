@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/pixelMan.png</SourceFile>
-  <SourceTime>2021-01-30T11:09:51.0850465-08:00</SourceTime>
-  <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/pixelMan.xnb</DestFile>
-  <DestTime>2021-01-30T16:38:01.1161893-08:00</DestTime>
+  <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/SkaterUpRight.png</SourceFile>
+  <SourceTime>2021-02-01T15:01:00.4507418-08:00</SourceTime>
+  <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/SkaterUpRight.xnb</DestFile>
+  <DestTime>2021-02-01T15:40:02.5724715-08:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

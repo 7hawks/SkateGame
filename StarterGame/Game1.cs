@@ -11,10 +11,11 @@ namespace StarterGame
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
-        // float targetY;
+        
         private CollissionObject collissionObj;
         Player player1;
         SoundEffect soundEffect;
+        SoundEffect soundLand;
 
         public Game1()
         {
@@ -31,15 +32,14 @@ namespace StarterGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            //var intstance = this.Content.Load
-            soundEffect = Content.Load<SoundEffect>("skatePop");
+            
+            soundEffect = Content.Load<SoundEffect>("skatePop2");
+            soundLand = Content.Load<SoundEffect>("808clap");
 
             font = Content.Load<SpriteFont>("fonts");
-            player1 = new Player(this.Content.Load<Texture2D>("SkaterLeft"), this.Content.Load<Texture2D>("Skater"), this.Content.Load<Texture2D>("SkaterDownRight"), this.Content.Load<Texture2D>("SkaterDownLeft"),
-                this.Content.Load<Texture2D>("SkaterUp"), this.Content.Load<Texture2D>("SkaterDown"));
+            player1 = new Player(this.Content.Load<Texture2D>("olliePop"), this.Content.Load<Texture2D>("ollieAir"));
             collissionObj = new CollissionObject(this.Content.Load<Texture2D>("smileyBlue"));
 
-           // targetY = logo.Height * scale.Y;
         }
         
         protected override void Update(GameTime gameTime)
@@ -47,13 +47,12 @@ namespace StarterGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            player1.UpdateJump(gameTime.ElapsedGameTime.TotalSeconds, soundEffect);
+            player1.UpdateJump(gameTime.ElapsedGameTime.TotalSeconds, soundEffect, soundLand);
             player1.HandlePosition(Keyboard.GetState().GetPressedKeys(), collissionObj);
 
             //Point point = new Point(Mouse.GetState().X);
             if (collissionObj.block.Contains(new Point(Mouse.GetState().X)) && collissionObj.block.Contains(new Point(Mouse.GetState().Y)))
             {
-                
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
                     collissionObj.logo = this.Content.Load<Texture2D>("pray");
@@ -73,8 +72,9 @@ namespace StarterGame
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             
             _spriteBatch.Draw(this.Content.Load<Texture2D>("pavement"), new Rectangle(0, 0, 800, 480), Color.White);
-            _spriteBatch.Draw(player1.logo, player1.player, Color.White);
-
+            _spriteBatch.Draw(this.Content.Load<Texture2D>("shadow"), player1.shadow, Color.White);
+            //_spriteBatch.Draw(player1.logo, player1.player, Color.White);
+            _spriteBatch.Draw(this.Content.Load<Texture2D>("skaterSheet"), player1.player, player1.Sprite(), Color.White);
             _spriteBatch.Draw(collissionObj.logo, collissionObj.block, Color.White);
             _spriteBatch.DrawString(font, "X: " + player1.player.X, new Vector2(100, 80), Color.Black);
             _spriteBatch.DrawString(font, "Y: " + player1.player.Y, new Vector2(100, 100), Color.Black);

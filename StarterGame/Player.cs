@@ -8,6 +8,10 @@ namespace StarterGame
 {
     class Player
     {
+        private const int width = 20;
+        private const int height = 31;
+        private Direction direction;
+
         int jumpspeed = 0;
         double prevFrameTime;
         private float velocityY = 3f;
@@ -15,7 +19,7 @@ namespace StarterGame
         double jumpTime = 0f;
         double jumpStartTime;
         private float velocity = 4;
-        //private float reboundVelocity = 2;
+       
         const int bounds = 3;
         private readonly float targetX = 128;
         public Vector2 position;
@@ -23,42 +27,38 @@ namespace StarterGame
         private Keys prevKeyX;
         private Keys prevKeyY;
         public Rectangle player;
+        public Rectangle shadow;
         CollideDirection collide;
         State state;
-        private Texture2D left;
-        private Texture2D right;
-        private Texture2D rightDown;
-        private Texture2D leftDown;
-        private Texture2D up;
-        private Texture2D down;
+
+        private Texture2D olliePop;
+        private Texture2D ollieAir;
+
         int startPosition;
-        private float gravity = 2;
+
         JumpDirection jumpDirection;
-       // Velocity = Vector2.Zero;
-        
 
         public Texture2D logo { get; set; }
 
-        public Player(Texture2D left, Texture2D right, Texture2D rightDown, Texture2D leftDown, Texture2D up, Texture2D down)
+        public Player(Texture2D pop, Texture2D air)
         {
+            direction = Direction.Right;
             state = State.Walking;
-            this.left = left;
-            this.right = right;
-            this.rightDown = rightDown;
-            this.leftDown = leftDown;
-            this.up = up;
-            this.down = down;
+
+            this.olliePop = pop;
+            this.ollieAir = air;
+
+            this.shadow = new Rectangle(0, 0, 60, 96);
             collide = CollideDirection.False;
-            logo = right; 
+           // logo = right; 
             player = new Rectangle(0, 0, 60, 96);
             position = new Vector2(0, 0);
-            scale = new Vector2(targetX / (float)logo.Width, targetX / (float)logo.Width);
+          //  scale = new Vector2(targetX / (float)logo.Width, targetX / (float)logo.Width);
         }
 
 
         public void HandlePosition(Keys[] inputKeys, CollissionObject coll)
         {
-
             CollissionCheck(coll.block);
 
             switch (inputKeys.Length)
@@ -226,9 +226,11 @@ namespace StarterGame
                 collide = CollideDirection.False;
                 return;
             }
-            logo = left;
+           // logo = left;
             player.X -= (int)velocity;
+            shadow.X -= (int)velocity;
             position.X -= velocity;
+            direction = Direction.Left;
         }
 
         private void MoveRight()
@@ -238,9 +240,11 @@ namespace StarterGame
                 collide = CollideDirection.False;
                 return;
             }
-            logo = right;
+           // logo = right;
             player.X += (int)velocity;
+            shadow.X += (int)velocity;
             position.X += velocity;
+            direction = Direction.Right;
         }
 
         public void MoveUp()
@@ -250,9 +254,15 @@ namespace StarterGame
                 collide = CollideDirection.False;
                 return;
             }
-            logo = up;
+            //logo = up;
             player.Y -= (int)velocity;
+            if (state != State.Jumping)
+            {
+                shadow.Y -= (int)velocity;
+            }
+            
             position.Y -= velocity;
+            direction = Direction.Up;
         }
 
         private void MoveDown()
@@ -262,44 +272,55 @@ namespace StarterGame
                 collide = CollideDirection.False;
                 return;
             }
-            logo = down;
+           // logo = down;
             player.Y += (int)velocity;
+            if (state != State.Jumping)
+            {
+                shadow.Y += (int)velocity;
+            }
+                
             position.Y += velocity;
+            direction = Direction.Down;
         }
 
         private void MoveNorthwest()
         {
             MoveUp();
             MoveLeft();
+            //logo = upLeft;
             prevKeyX = Keys.W;
+            direction = Direction.UpLeft;
         }
 
         private void MoveNortheast()
         {
             MoveUp();
             MoveRight();
-
+            //logo = upRight;
             prevKeyX = Keys.D;
+            direction = Direction.UpRight;
         }
 
         private void MoveSoutheast()
         {
             MoveDown();
             MoveRight();
-            logo = rightDown;
+            //logo = rightDown;
+            direction = Direction.DownRight;
         }
 
         private void MoveSouthwest()
         {
             MoveDown();
             MoveLeft();
-            logo = leftDown;
+            //logo = leftDown;
+            direction = Direction.DownLeft;
         }
 
 
         private void Jump(double elapsedGameTime)
         {
-            if (state != State.Jumping) ;
+            if (state != State.Jumping)
             {
                 getJumpDirection();
                 state = State.Jumping;
@@ -310,27 +331,27 @@ namespace StarterGame
             }
         }
 
-        public void UpdateJump(double elapsedGameTime, SoundEffect sound)
+        public void UpdateJump(double elapsedGameTime, SoundEffect sound, SoundEffect soundLand)
         {
             if (state == State.Walking)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     sound.Play();
+                    logo = olliePop;
                     Jump(elapsedGameTime);
                 }
             }
             if (state == State.Jumping)
             {
-                player.Y += jumpspeed;
-/*                if (prevKeyX == Keys.D)
+                if (jumpspeed < -5)
                 {
-                    player.X += (int)velocity;
+                    logo = olliePop;
                 }
-                else if (prevKeyX == Keys.A)
-                {
-                    player.X -= (int)velocity;
-                }*/
+                else logo = ollieAir;
+               
+                player.Y += jumpspeed;
+
                 jumpspeed += 1;
                 switch (jumpDirection)
                 {
@@ -342,35 +363,14 @@ namespace StarterGame
                         break;
                 }
 
-
-                // jumpTime += elapsedGameTime;
-               // prevFrameTime += elapsedGameTime;
-               // float dt = (float)elapsedGameTime - (float)prevFrameTime;
                 if (player.Y >= startPosition)
                 {
+                    soundLand.Play();
+                   // logo = right;
                     state = State.Walking;
                     return;
                 }
-/*                if (dt > 0.15f)
-                {
-                    dt = 0.15f;
-                }*/
 
-
-               // player.Y -= (int)(velocityY * dt) ;
-               // position.Y -= velocityY * dt;
-               // velocityY += gravity * dt;
-
-/*                if (startPosition - player.Y < 50)
-                {
-                    MoveUp();
-                   // this.Velocity.Y++;
-                }*/
-                
-/*                if (player.Y > startPosition)
-                {
-                    state = State.Walking;
-                }*/
             }
         }
         public void getJumpDirection()
@@ -385,6 +385,11 @@ namespace StarterGame
             }
             else
                 jumpDirection = JumpDirection.None;
+        }
+
+        public Rectangle Sprite()
+        {
+            return new Rectangle(width * (int)direction, 0, width, height);
         }
     }
 }
