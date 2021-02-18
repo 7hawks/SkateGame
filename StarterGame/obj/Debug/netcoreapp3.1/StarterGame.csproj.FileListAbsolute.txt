@@ -40,3 +40,51 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\SkaterUpRight.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\808clap.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetWIP.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platform.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\ramp.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\ramp2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\rampBigger.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\kickflipSpritesheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSpritesheet2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\realSkateLand.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\realSkatePop.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Janou Touryuumon - 01-40GBP7KUASc.ogg
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Janou Touryuumon - 01-40GBP7KUASc.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\JanouSong.ogg
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\JanouSong.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\volume.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\trickSound.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Roland-SC-88-Orchestra-Hit.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzBg.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\trickSound2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\coinSpritesheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Hi Hat 1.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Hi Hat 2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Kick.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Open Hi Hat.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\Snare 2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\stairs.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzBg2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\lightLayer.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSpritesheetGrind.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\grindSound.ogg
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\grindSound.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\stair10.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\star.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\orangePixel.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\yellowPixel.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\Hi Hat 1.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\beepBeanSpritesheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\grindSound.ogg
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\grindSound.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\realSkateLand.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\realSkatePop.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\JanouTouryuumon.ogg
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\JanouTouryuumon.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\popup.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetWreck.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\startMenu\exitButton.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\startMenu\startButton.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\startMenu\titleCard.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platforms\50platform.xnb

@@ -4,9 +4,12 @@ using System.Text;
 
 namespace StarterGame
 {
-    enum State
+    public enum State
     {
-        Walking,
-        Jumping
+        Grounded,
+        Jumping, 
+        Popped,
+        Ramp,
+        Wreck
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StarterGame
 {
-    enum Direction
+    public enum Direction
     {
         Right = 0,
         DownRight = 1,
@@ -13,6 +13,7 @@ namespace StarterGame
         Left = 4,
         UpLeft = 5,
         Up = 6,
-        UpRight = 7
+        UpRight = 7,
+        None = 8
     }
 }
