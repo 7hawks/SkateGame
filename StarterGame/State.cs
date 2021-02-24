@@ -9,6 +9,7 @@ namespace StarterGame
         Grounded,
         Jumping, 
         Popped,
+        Push,
         Ramp,
         Wreck
     }

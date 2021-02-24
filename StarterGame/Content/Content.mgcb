@@ -49,6 +49,12 @@
 /processorParam:Quality=Best
 /build:audio/realSkatePop.wav
 
+#begin audio/wreckSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:audio/wreckSound.wav
+
 #begin beepBeanSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -72,6 +78,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:coinSpritesheet.png
+
+#begin decorations/dustCloudSheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:decorations/dustCloudSheet.png
 
 #begin fonts.spritefont
 /importer:FontDescriptionImporter
@@ -271,6 +289,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:skatePop2.wav
+
+#begin skaterSheetPush.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:skaterSheetPush.png
 
 #begin skaterSheetWreck.png
 /importer:TextureImporter

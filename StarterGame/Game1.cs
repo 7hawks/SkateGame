@@ -17,14 +17,20 @@ namespace StarterGame
         private string popUpText;
         private GameState state;
         private Platform platform;
+        private List<Platform> platforms;
         
         private CollissionObject collissionObj;
+        public DustCloud dustCloud;
+
+
+
         ParticleEngine particleEngine;
         Player player1;
         NonPlayableCharacter beep;
         SoundEffect soundEffect;
         SoundEffect soundLand;
         SoundEffect trickSound;
+        SoundEffect wreckSound;
         Song grindSong;
         Song song;
         SoundEffect[] sounds = new SoundEffect[5];
@@ -36,8 +42,8 @@ namespace StarterGame
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1200;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 920;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -62,16 +68,21 @@ namespace StarterGame
             textures.Add(Content.Load<Texture2D>("yellowPixel"));
        
             particleEngine = new ParticleEngine(textures, new Vector2(400, 240));
-            platform = new Platform(0, 109, Utilities.Scale(71, scale), Utilities.Scale(163, scale));
+            platform = new Platform(0, 109, Utilities.Scale(71, scale), Utilities.Scale(163, scale), PlatformType.Box);
+            platforms = new List<Platform>();
+            platforms.Add(platform);
             soundEffect = Content.Load<SoundEffect>("realSkatePop");
             soundLand = Content.Load<SoundEffect>("realSkateLand");
             trickSound = Content.Load<SoundEffect>("trickSound2");
+            wreckSound = Content.Load<SoundEffect>("./audio/wreckSound");
             grindSong = Content.Load<Song>("grindSound");
             song = Content.Load<Song>("./audio/JanouTouryuumon");
             //MediaPlayer.Play(song);
             font = Content.Load<SpriteFont>("fonts");
-            player1 = new Player();
+            player1 = new Player(new InputComponent());
             beep = new NonPlayableCharacter(Content.Load<Texture2D>("beepBeanSpritesheet"), 600, 200, Utilities.Scale(20, scale), Utilities.Scale(28, scale));
+            dustCloud = new DustCloud(Utilities.Scale(28, scale), Utilities.Scale(15, scale));
+
             collissionObj = new CollissionObject(this.Content.Load<Texture2D>("stair10"), PlatformType.Rail);
             volume = new VolumeButton();
 
@@ -95,45 +106,45 @@ namespace StarterGame
         {
             if (platform.rect.Intersects(player1.player))
             {
-                player1.jumpHeight = 0;
+                player1.physics.jumpHeight = 0;
             }
             if (!platform.rect.Intersects(player1.player))
             {
-                player1.jumpHeight = Utilities.Scale(Platform.height, 3.75);
+                player1.physics.jumpHeight = Utilities.Scale(Platform.height, 3.75);
             }
 
-                if (state == GameState.Menu)
+
+            switch (state)
             {
-                if (menu.StartCheck())
-                {
-                    state = GameState.Game;
-                }
-                if (menu.ExitCheck())
-                {
-                    this.Exit();
-                }
+                case GameState.Menu:
+                    if (menu.StartCheck())
+                    {
+                        state = GameState.Game;
+                    }
+                    if (menu.ExitCheck())
+                    {
+                        Exit();
+                    }
+                    break;
+                case GameState.Game:
+                    beep.CheckPopup();
+
+                    particleEngine.EmitterLocation = new Vector2(player1.player.X + 50, player1.player.Y + 120);
+                    particleEngine.Update();
+
+                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                        Exit();
+
+                    foreach (Coin c in coins)
+                    {
+                        c.AnimateCoin(gameTime.ElapsedGameTime.TotalMilliseconds, player1);
+                    }
+
+                    player1.HandlePosition(gameTime.ElapsedGameTime.TotalMilliseconds, soundEffect, soundLand, trickSound, grindSong, platforms, wreckSound, dustCloud);
+                    beep.Animate(gameTime.ElapsedGameTime.TotalMilliseconds);
+                    volume.CheckToggle(song);
+                    break;
             }
-            else if (state == GameState.Game)
-            {
-                beep.CheckPopup();
-
-                particleEngine.EmitterLocation = new Vector2(player1.player.X + 50, player1.player.Y + 120);
-                particleEngine.Update();
-
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    Exit();
-
-                foreach (Coin c in coins)
-                {
-                    c.AnimateCoin(gameTime.ElapsedGameTime.TotalMilliseconds, player1);
-                }
-
-                player1.UpdateJump(gameTime.ElapsedGameTime.TotalMilliseconds, soundEffect, soundLand, trickSound, grindSong, collissionObj.block);
-                player1.HandlePosition(collissionObj);
-                beep.Animate(gameTime.ElapsedGameTime.TotalMilliseconds);
-                volume.CheckToggle(song);
-            }
-
 
             base.Update(gameTime);
         }
@@ -159,25 +170,44 @@ namespace StarterGame
                     spriteBatch.Draw(this.Content.Load<Texture2D>("coinSpritesheet"), c.rect, c.Sprite(), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .2f);
                 }
 
-                spriteBatch.Draw(this.Content.Load<Texture2D>("skaterSheetWreck"), player1.player, player1.Sprite(gameTime.ElapsedGameTime.TotalMilliseconds), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, player1.depthLayer);
+                spriteBatch.Draw(this.Content.Load<Texture2D>("skaterSheetPush"), player1.player, player1.Sprite(gameTime.ElapsedGameTime.TotalMilliseconds), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, player1.depthLayer);
                 spriteBatch.Draw(this.Content.Load<Texture2D>("beepBeanSpritesheet"), beep.rect, beep.Sprite(), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, player1.depthLayer);
 
+                spriteBatch.DrawString(font, "State: " + player1.state, new Vector2(0, 0), Color.Black);
+                spriteBatch.DrawString(font, "wreckFrame: " + player1.wreckFrame, new Vector2(0, 40), Color.Black);
                 spriteBatch.DrawString(font, "Coins: " + player1.coinCount, new Vector2(1050, 120), Color.Lime);
-                spriteBatch.DrawString(font, "friction: " + player1.friction, new Vector2(400, 160), Color.Lime);
+                spriteBatch.DrawString(font, "friction: " + player1.physics.friction, new Vector2(400, 160), Color.Lime);
                 spriteBatch.DrawString(font, "depth: " + player1.depthLayer, new Vector2(400, 180), Color.Lime);
+                
                 spriteBatch.DrawString(font, "acceleration: " + player1.acceleration, new Vector2(400, 200), Color.Lime);
+                spriteBatch.DrawString(font, "boxcheck: " + player1.boxcheck, new Vector2(400, 240), Color.Lime);
                 spriteBatch.DrawString(font, "Speed: " + player1.speed, new Vector2(400, 260), Color.Lime);
-                spriteBatch.DrawString(font, "JumpHeight: " + player1.jumpHeight, new Vector2(400, 40), Color.Pink);
-                spriteBatch.DrawString(font, "frame: " + player1.wreck.frame, new Vector2(100, 60), Color.Black);
-                spriteBatch.DrawString(font, "X: " + player1.player.X, new Vector2(100, 80), Color.Black);
-                spriteBatch.DrawString(font, "Y: " + player1.player.Y, new Vector2(100, 100), Color.Black);
-                spriteBatch.DrawString(font, "jump direction: " + player1.jumpDirection, new Vector2(0, 500), Color.Black);
-            //    spriteBatch.DrawString(font, "player.bottom - block.top: " + (player1.player.Bottom - collissionObj.block.Top), new Vector2(100, 120), Color.Black);
+
+
+                spriteBatch.DrawString(font, "JumpHeight: " + player1.physics.jumpHeight, new Vector2(400, 40), Color.Pink);
+                spriteBatch.DrawString(font, "jump Direction: " + player1.jumpDirection, new Vector2(0, 300), Color.Black);
+                spriteBatch.DrawString(font, "inputDirection: " + player1.input.direction, new Vector2(0, 400), Color.Black);
+                spriteBatch.DrawString(font, "dustCloud active: " + dustCloud.active, new Vector2(0, 440), Color.Black);
+
+
+                spriteBatch.DrawString(font, "direction: " + player1.direction, new Vector2(0, 500), Color.Black);
+
+                spriteBatch.DrawString(font, "collide: " + player1.collide, new Vector2(0, 530), Color.Black);
+                spriteBatch.DrawString(font, "bottom - bottom: " + (player1.player.Bottom - platform.rect.Bottom), new Vector2(0, 560), Color.Black);
+                //    spriteBatch.DrawString(font, "player.bottom - block.top: " + (player1.player.Bottom - collissionObj.block.Top), new Vector2(100, 120), Color.Black);
                 if (beep.dialogue)
                 {
                     spriteBatch.Draw(this.Content.Load<Texture2D>("popup"), new Rectangle(300, 500, 800, 200), null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .01f);
                     spriteBatch.DrawString(font, beep.popup.message, new Vector2(300, 500), Color.Black);
                 }
+
+
+                if (dustCloud.active)
+                {
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("./decorations/dustCloudSheet"), dustCloud.rect, dustCloud.Update(gameTime.ElapsedGameTime.TotalMilliseconds), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .01f);
+                }
+
+
                 //spriteBatch.DrawString(font, "player.top " + player1.player.Top + "block.top " + collissionObj.block.Top, new Vector2(100, 160), Color.Black);
                // spriteBatch.DrawString(font, "player.bottom: " + player1.player.Bottom + "block.bottom: " + collissionObj.block.Bottom, new Vector2(100, 180), Color.Black);
             }
