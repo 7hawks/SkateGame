@@ -26,6 +26,8 @@
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/pavement.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platform.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platforms/50platform.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platforms/rail.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platforms/railLonger.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/popup.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/ramp.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/ramp2.png</File>
@@ -52,6 +54,8 @@
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/yellowPixel.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

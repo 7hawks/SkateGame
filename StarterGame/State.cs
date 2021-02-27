@@ -6,6 +6,7 @@ namespace StarterGame
 {
     public enum State
     {
+        Grinding,
         Grounded,
         Jumping, 
         Popped,

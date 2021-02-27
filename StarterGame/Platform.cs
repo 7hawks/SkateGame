@@ -1,16 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace StarterGame
 {
-    public class Platform
+    public class Platform : GameObject
     {
-        public Rectangle rect;
         public PlatformType type { get; set; }
         public const int height = 50;
+        public Texture2D sprite;
+        public bool intersects;
 
-        public Platform(int x, int y, int height, int width, PlatformType inputType)
+        public Platform(Texture2D sprite, int x, int y, int width, int height, PlatformType inputType) : base( x, y, width, height )
         {
-            rect = new Rectangle(x, y, height, width);
+            intersects = false;
+            this.sprite = sprite;
             type = inputType;
         }
     }

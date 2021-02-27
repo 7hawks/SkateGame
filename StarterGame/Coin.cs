@@ -64,7 +64,7 @@ namespace StarterGame
 
         private void CheckBounds(Player player)
         {
-            if(rect.Intersects(player.player))
+            if(rect.Intersects(player.rect))
             {
                 retrieved = true;
                 player.coinCount++;

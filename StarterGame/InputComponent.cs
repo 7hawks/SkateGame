@@ -26,7 +26,7 @@ namespace StarterGame
 
             if (player.state == State.Jumping) // disable changing directions mid-air
             {
-                return;
+                return;                         
             }
 
             switch (Keyboard.GetState().GetPressedKeys().Length)
@@ -41,7 +41,12 @@ namespace StarterGame
                     ThreeButtonPress();
                     break;
                 default:
-                    prevDirection = player.direction;
+
+                    if (player.direction!= Direction.None)
+                    {
+                        prevDirection = player.direction;
+                    }
+
                     direction = Direction.None;
                     break;
             }

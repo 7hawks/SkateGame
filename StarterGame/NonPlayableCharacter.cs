@@ -4,24 +4,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace StarterGame
 {
-    public class NonPlayableCharacter
+    public class NonPlayableCharacter : GameObject
     {
         private double interval = 250;
         public int frame = 0;
         private double timer = 0f;
-        public Rectangle rect;
         public bool mute;
-        public Vector2 scale;
         public bool dialogue;
         public Popup popup;
         public Texture2D logo { get; set; }
 
-        public NonPlayableCharacter(Texture2D inputLogo, int locX, int locY, int inputWidth, int inputHeight)
+        public NonPlayableCharacter(Texture2D inputLogo, int x, int y, int width, int height):base(x, y, width, height)
         {
             popup = new Popup(0, 0, "hello there!");
             mute = false;
             logo = inputLogo;
-            rect = new Rectangle(locX, locY, inputWidth, inputHeight);
         }
 
         public void Animate(double elapsedTime)

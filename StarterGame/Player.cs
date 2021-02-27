@@ -1,36 +1,34 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 
 namespace StarterGame
 {
-    public class Player
+    public class Player : GameObject
     {
         public int wreckFrame;
-
+        public int trickframe = 3;
         public PhysicsComponent physics;
         public InputComponent input;
         public bool boxcheck;
-        public float acceleration = 0;
         private bool toggle;
+        public float acceleration = 0;
+
         public double interval = 100;
         public double timer = 0f;
         private double grindTimer = 0f;
-        public int trickframe = 3;
+
         public Wreck wreck;
         public int coinCount;
-        public float speed;
         private const int width = 20;
         public const int characterHeight = 31;
         public Direction direction;
         public float depthLayer = .1f;
-        public int jumpspeed = 0;
-        const int bounds = 3;
-        public Rectangle player;
+
+
         //public Rectangle shadow;
-        public Direction collide;
+
         public State state;
         public TrickState trickState;
 
@@ -39,7 +37,7 @@ namespace StarterGame
 
         public Direction jumpDirection;
 
-        public Player(InputComponent inputComponent)
+        public Player(InputComponent inputComponent, int x, int y, int width, int height):base(x, y, width, height)
         {
             wreckFrame = 0;
             physics = new PhysicsComponent();
@@ -47,21 +45,17 @@ namespace StarterGame
             toggle = false;
             coinCount = 0;
             trickState = TrickState.None;
-            speed = 0;
             direction = Direction.Right;
             jumpDirection = Direction.Right;
             state = State.Grounded;
             
             wreck = new Wreck();
             //this.shadow = new Rectangle(0, 0, 60, 96);
-            collide = Direction.None;
-           
-            player = new Rectangle(0, 200, 75, 120);
         }
 
-        private void BoxCheck(Platform box)
+/*        private void BoxCheck(Platform box)
         {
-            if (player.Left - box.rect.Right < 10 && (direction == Direction.Left || direction == Direction.DownLeft || direction == Direction.UpLeft))
+            if (rect.Left - box.rect.Right < 10 && (direction == Direction.Left || direction == Direction.DownLeft || direction == Direction.UpLeft))
             {
                 collide = direction;
                 return;
@@ -70,18 +64,18 @@ namespace StarterGame
               //  collide = Direction.None;
             //boxcheck = false;
            // return false;
-        }
+        }*/
 
-        public void HandlePosition(double elapsedTime, SoundEffect sound, SoundEffect landingSound, SoundEffect trickSound, Song grindSong, List<Platform> platforms, SoundEffect wreckSound, DustCloud dustCloud)
+        public void HandlePosition(double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
             input.Update(this);
-            physics.Update(this, elapsedTime, sound, landingSound, trickSound, grindSong, platforms, wreckSound, dustCloud);
+            physics.Update(this, elapsedTime, platforms, dustCloud);
 
-            if (state == State.Jumping) { return; }
+            if (state == State.Jumping || state == State.Grinding) { return; }
 
             foreach(Platform p in platforms)
             {
-                if (player.Intersects(p.rect))
+                if (rect.Intersects(p.rect))
                 {
                     if (p.type == PlatformType.Ramp)
                     {
@@ -93,7 +87,7 @@ namespace StarterGame
                         //BoxCheck(p);
                     }
                 }
-                CollissionCheck(p.rect);
+                physics.CollissionCheck(rect, p.rect);
             }
 /*            if (!player.Intersects(coll.block))
             {
@@ -109,8 +103,6 @@ namespace StarterGame
             else
                 depthLayer = .3f;*/
         }
-
-
 
 /*        private void RampCheck(Rectangle ramp)
         {
@@ -153,65 +145,52 @@ namespace StarterGame
             }
         }*/
 
-        private void CollissionCheck(Rectangle block)
+/*        private void CollissionCheck(Rectangle block)
         {
-            if (player.Intersects(block))
+            if (rect.Intersects(block))
             {
-                if (player.Bottom > block.Top && player.Top < block.Bottom)
+                if (rect.Bottom > block.Top && rect.Top < block.Bottom)
                 {
-                    if ((((player.Right - speed) - block.Left) <= bounds) && ((player.Right - speed) - block.Left) >= -bounds)
+                    if ((((rect.Right - physics.speed) - block.Left) <= bounds) && ((rect.Right - physics.speed) - block.Left) >= -bounds)
                     {
                         collide = Direction.Right;
                         return;
                     }
-                    else if (((player.Left - block.Right) <= bounds) && (player.Left - block.Right) >= -bounds)
+                    else if (((rect.Left - block.Right) <= bounds) && (rect.Left - block.Right) >= -bounds)
                     {
                         collide = Direction.Left;
                         return;
                     }
                 }
 
-                if ((player.Bottom - block.Top >= 8 && player.Bottom - block.Top <= 20) || player.Bottom - block.Bottom > -200 && player.Bottom - block.Bottom < 0)
+                if ((rect.Bottom - block.Top >= 8 && rect.Bottom - block.Top <= 20) || rect.Bottom - block.Bottom > -200 && rect.Bottom - block.Bottom < 0)
                 {
                     collide = Direction.Down;
                     return;
                 }
-                if ((player.Top - block.Bottom) <= -60 && (player.Top - block.Bottom) >= -60)
+                if ((rect.Top - block.Bottom) <= -60 && (rect.Top - block.Bottom) >= -60)
                 {
                     collide = Direction.Up;
                     return;
                 }
             }
             collide = Direction.None;
-        }
+        }*/
 
         public void Reset()
         {
-            speed = 0;
+            physics.speed = 0;
             direction = Direction.Right;
             state = State.Grounded;
         }
 
         public Rectangle Sprite(double elapsedTime)
         {
-
-            switch (state)
-            {
-                case State.Push:
-                    return new Rectangle(physics.pushFrame * 32, 126, 32, 32);
-                case State.Wreck:
-                    return new Rectangle(wreck.frame * 20, 95, width, characterHeight);
-                case State.Popped:
-                    return new Rectangle(21, 31, width, characterHeight);
-                case State.Jumping:
-                    return new Rectangle(0, 31, width, characterHeight);
-            }
-
             switch (trickState)
             {
                 case TrickState.Kickflip:
                     return new Rectangle(trickframe * 23, 62, width, characterHeight);
-                case TrickState.Grinding:
+/*                case TrickState.Grinding:
                     grindTimer += elapsedTime;
 
                     if (grindTimer > interval)
@@ -228,9 +207,21 @@ namespace StarterGame
                     {
                         return new Rectangle(width * (int)direction, 0, width, characterHeight);
                     }
-                    return new Rectangle(width * (int)direction, 95, width, characterHeight);
+                    return new Rectangle(width * (int)direction, 95, width, characterHeight);*/
             }
-
+            switch (state)
+            {
+                case State.Grinding:
+                    return new Rectangle(width * (int)jumpDirection, 0, width, characterHeight);
+                case State.Push:
+                    return new Rectangle(physics.pushFrame * 32, 126, 32, 32);
+                case State.Wreck:
+                    return new Rectangle(wreck.frame * 20, 95, width, characterHeight);
+                case State.Popped:
+                    return new Rectangle(21, 31, width, characterHeight);
+                case State.Jumping:
+                    return new Rectangle(0, 31, width, characterHeight);
+            }
 
             if (input.direction == Direction.None)
             {

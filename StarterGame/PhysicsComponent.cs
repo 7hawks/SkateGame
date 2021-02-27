@@ -11,6 +11,9 @@ namespace StarterGame
     
     public class PhysicsComponent : IGameComponent
     {
+        const int bounds = 3;
+        public int jumpSpeed;
+        public float speed;
         private const float maxAcceleration = 4;
         public  float maxSpeed = 8f;
         public float friction = 0.00029f;
@@ -20,54 +23,274 @@ namespace StarterGame
         public int pushFrame;
         private const int pushInterval = 100;
         private double timer;
+        public Direction collide;
 
         public PhysicsComponent()
         {
+            collide = Direction.None;
             jumpHeight = 0;
+            jumpSpeed = 0;
             pushFrame = 0;
+            speed = 0;
             timer = 0;
         }
 
-        public void Update(Player player, double elapsedTime, SoundEffect sound, SoundEffect landingSound, SoundEffect trickSound, Song grindSong, List<Platform> platforms, SoundEffect wreckSound, DustCloud dustCloud)
+        /// <summary>
+        ///     Iterates through the game world platforms to check if player collides
+        /// </summary>
+        /// <param name="block"></param>
+        public void CollissionCheck(Rectangle playerRect, Rectangle block)
         {
+            if (playerRect.Intersects(block))
+            {
+                if (playerRect.Bottom > block.Top && playerRect.Top < block.Bottom)
+                {
+                    if ((((playerRect.Right - speed) - block.Left) <= bounds) && ((playerRect.Right - speed) - block.Left) >= -bounds)
+                    {
+                        collide = Direction.Right;
+                        return;
+                    }
+                    else if (((playerRect.Left - block.Right) <= bounds) && (playerRect.Left - block.Right) >= -bounds)
+                    {
+                        collide = Direction.Left;
+                        return;
+                    }
+                }
+
+                if ((playerRect.Bottom - block.Top >= 8 && playerRect.Bottom - block.Top <= 20) || playerRect.Bottom - block.Bottom > -200 && playerRect.Bottom - block.Bottom < 0)
+                {
+                    collide = Direction.Down;
+                    return;
+                }
+                if ((playerRect.Top - block.Bottom) <= -60 && (playerRect.Top - block.Bottom) >= -60)
+                {
+                    collide = Direction.Up;
+                    return;
+                }
+            }
+            collide = Direction.None;
+        }
+
+        public void UpdateGrind(Player player, List<Platform> platforms)
+        {
+            if (player.state != State.Grinding)
+                return;
+
+            foreach (Platform p in platforms)
+            {
+                if (p.type == PlatformType.Rail && player.rect.Intersects(p.rect))
+                {
+                    return;
+                }
+            }
+
+            player.state = State.Jumping;
+        }
+
+
+        public void Update(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
+        {
+
+            /*            switch (player.state)
+                        {
+                            case State.Jumping:
+                                UpdateJump(player, elapsedTime, platforms, dustCloud);
+                                break;
+                            case State.Grounded:
+                                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                                {
+                                    Push(player, elapsedTime);
+                                }
+                                break;
+                            case State.Grinding:
+                                UpdateGrind(player, platforms);
+                                break;
+                            case State.Push:
+                                Push(player, elapsedTime);
+                                break;
+
+
+                        }*/
+
+
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || player.state == State.Push)
             {
                 Push(player, elapsedTime);
             }
 
-            UpdateJump(player, elapsedTime, sound, landingSound, trickSound, grindSong, platforms, wreckSound, dustCloud);
-
-            if (player.state != State.Jumping && player.speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
+            if (player.state == State.Grinding)
             {
-/*                if (player.acceleration < .01)
-                {
-                    player.acceleration = 0;
-                    return;
-                }
-                if (player.speed < .01)
-                {
-                    player.speed = 0;
-                    return;
-                }*/
+                UpdateGrind(player, platforms);
+            }
+
+            UpdateJump(player, elapsedTime, platforms, dustCloud);
+
+         
+
+            if (player.state == State.Grounded && speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
+            {
 
                 if (player.acceleration > 0 && player.acceleration > .00001)
                 {
                     player.acceleration *= .95f;
                 }
                 
-                if (player.speed > 0 && player.speed > .0001)
+                if (speed > 0 && speed > .0001)
                 {
-                    player.speed *= .9f;
+                    speed *= .9f;
                 }
-
             }
+
             if (player.input.direction == Direction.None && player.acceleration > .01) 
             {
                 Move(player, player.input.prevDirection);
                 return;
             }
+            else if (player.state == State.Grinding)   // restrict movement to left and right while grinding
+            {
+                Move(player, player.jumpDirection);
+            }
+            else if (player.state == State.Jumping && player.input.direction == Direction.Up)   // prevents being able to super jump by pressing UP while jumping
+                Move(player, player.jumpDirection);
             else
                 Move(player, player.input.direction);
+        }
+
+
+        public void UpdateJump(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
+        {
+            player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
+
+            /*            if (player.trickState == TrickState.Grinding)
+                        {
+                            Move(player, player.jumpDirection);
+                            return;
+                        }*/
+
+            foreach (Platform p in platforms)
+            {
+                if (p.type == PlatformType.Rail && player.state == State.Grinding && player.rect.Intersects(p.rect))
+                {
+                    // player.rect.Y = p.rect.Y - 150 + (player.rect.X / 2);    // angle rail logic
+                    //wwww player.rect.Y = p.rect.Y - 150;
+                    Move(player, player.jumpDirection);
+                    return;
+                }
+                if (player.state == State.Grounded)
+                {
+                    if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0)
+                    {
+                        Fall(player);
+                    }
+                }
+            }
+
+            switch (player.state)
+            {
+                case State.Grounded:
+                    if (Mouse.GetState().RightButton == ButtonState.Pressed)
+                    {
+                        Game1.popSound.Play();
+                        player.state = State.Popped;
+                        return;
+                    }
+                    break;
+                case State.Popped:
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed && Mouse.GetState().RightButton == ButtonState.Pressed)
+                    {
+                        Jump(player);
+                    }
+                    break;
+                case State.Grinding:
+                    if (player.rect.Y >= player.startPosition + jumpHeight)
+                    {
+                        foreach (Platform p in platforms)
+                        {
+                            p.intersects = false;
+                        }
+                        Game1.landingSound.Play();
+                        player.state = State.Grounded;
+                        MediaPlayer.Pause();
+                        player.trickState = TrickState.None;
+                        Game1.trickSound.Play();
+                    }
+                    return;
+
+                case State.Jumping:
+                    CheckTrick(player, elapsedTime, platforms);      // need for grinding
+
+                    player.rect.Y += jumpSpeed;
+                    jumpSpeed += 1;
+
+                    if (player.rect.Y >= player.startPosition + jumpHeight)
+                    {
+                        dustCloud.Draw(player.rect.X, player.rect.Y);
+                        if (player.trickState == TrickState.Kickflip && player.trickframe < 7 && player.trickframe > 4)
+                        {
+                            player.wreckFrame = player.trickframe;
+                            Game1.wreckSound.Play();
+                            player.state = State.Wreck;
+                            player.trickState = TrickState.None;
+                            return;
+                        }
+
+                        Game1.landingSound.Play();
+                        player.state = State.Grounded;
+                        if (player.trickState == TrickState.Kickflip || player.state == State.Grinding)
+                        {
+                            MediaPlayer.Pause();
+                            player.trickState = TrickState.None;
+                            Game1.trickSound.Play();
+                        }
+                        return;
+                    }
+                    break;
+            }
+
+            /*            if (player.state == State.Grinding)
+                        {
+                            if (player.rect.Y >= player.startPosition + jumpHeight)
+                            {
+                                Game1.landingSound.Play();
+                                player.state = State.Grounded;
+                                MediaPlayer.Pause();
+                                player.trickState = TrickState.None;
+                                Game1.trickSound.Play();
+
+                            }
+                            return;
+                        }*/
+
+            /*            if (player.state == State.Jumping )
+                        {
+                            CheckTrick(player, elapsedTime, platforms);      // need for grinding
+
+                            player.rect.Y += jumpSpeed;
+                            jumpSpeed += 1;
+
+                            if (player.rect.Y >= player.startPosition + jumpHeight)
+                            {
+                                dustCloud.Draw(player.rect.X, player.rect.Y);
+                                if (player.trickState == TrickState.Kickflip && player.trickframe < 7 && player.trickframe > 4)
+                                {
+                                    player.wreckFrame = player.trickframe;
+                                    Game1.wreckSound.Play();
+                                    player.state = State.Wreck;
+                                    player.trickState = TrickState.None;
+                                    return;
+                                }
+
+                                Game1.landingSound.Play();
+                                player.state = State.Grounded;
+                                if (player.trickState == TrickState.Kickflip || player.state == State.Grinding)
+                                {
+                                    MediaPlayer.Pause();
+                                    player.trickState = TrickState.None;
+                                    Game1.trickSound.Play();
+                                }
+                                return;
+                            }
+                        }*/
         }
 
 
@@ -105,25 +328,27 @@ namespace StarterGame
                             collide = Direction.None;
                             return;
                         }*/
-            if (inputDirection != player.direction)
+            if (inputDirection != player.direction && speed > 2)
             {
-                if (inputDirection == Direction.Left && player.direction == Direction.Right && player.speed > 0)
+                if (inputDirection == Direction.Left && player.direction == Direction.Right)
                 {
-                    player.speed -= .2f;
+                    speed -= .2f;
 
-                    player.player.X += (int)player.speed;
-                    player.player.X += (int)player.speed;
+                    player.rect.X += (int)speed;
+                    player.rect.X += (int)speed;
+
                     return;
                 }
-                else if (inputDirection == Direction.Right && player.direction == Direction.Left && player.speed > 0)
+                else if (inputDirection == Direction.Right && player.direction == Direction.Left)
                 {
 
                     Decelerate();
 
-                    player.speed -= .2f;
+                    speed -= .2f;
 
-                    player.player.X -= (int)player.speed;
-                    player.player.X -= (int)player.speed;
+                    player.rect.X -= (int)speed;
+                    player.rect.X -= (int)speed;
+
                     return;
                 }
                 player.direction = inputDirection;
@@ -134,69 +359,69 @@ namespace StarterGame
             switch (inputDirection)
             {
                 case Direction.Up:
-                    if (player.player.Top <= 100)
+                    if (player.rect.Top <= 100)
                         return;
 
-                    player.player.Y -= (int)player.speed;
+                    player.rect.Y -= (int)speed;
                     break;
 
                 case Direction.Right:
-                    if (player.player.Right >= 1200)
+                    if (player.rect.Right >= Game1.view.width)
                         return;
 
-                    player.player.X += (int)player.speed;
+                    player.rect.X += (int)speed;
                     player.jumpDirection = Direction.Right;
                     break;
 
                 case Direction.Down:
-                    if (player.player.Bottom >= 720)
+                    if (player.rect.Bottom >= Game1.view.height)
                         return;
-                    if (player.collide == inputDirection)
+                    if (player.physics.collide == inputDirection)
                     {
                         return;
                     }
 
-                    player.player.Y += (int)player.speed; ;
+                    player.rect.Y += (int)speed; ;
                     break;
                 case Direction.Left:
-                    if (player.collide == inputDirection)
+                    if (player.physics.collide == inputDirection)
                     {
                         return;
                     }
 
-                    if (player.player.Left <= 0)
+                    if (player.rect.Left <= 0)
                         return;
 
-                    player.player.X -= (int)player.speed;
+                    player.rect.X -= (int)speed;
                     player.jumpDirection = Direction.Left;
                     break;
                 case Direction.UpLeft:
-                    if (player.collide == inputDirection)
+                    if (player.physics.collide == inputDirection)
                     {
                         Move(player, Direction.Up);
                         return;
                     }
-                    player.player.Y -= (int)(player.speed * .65f);
-                    player.player.X -= (int)(player.speed * .65f);
+                    player.rect.Y -= (int)(speed * .65f);
+                    player.rect.X -= (int)(speed * .65f);
                   //  Move(player, Direction.Up);
                    // Move(player, Direction.Left);
                     break;
                 case Direction.UpRight:
-                    player.player.Y -= (int)(player.speed * .65f);
-                    player.player.X += (int)(player.speed * .65f);
+                    player.rect.Y -= (int)(speed * .65f);
+                    player.rect.X += (int)(speed * .65f);
                     //Move(player, Direction.Up);
                    // Move(player, Direction.Right);
                     break;
                 case Direction.DownRight:
-                    player.player.Y += (int)(player.speed * .65f);
-                    player.player.X += (int)(player.speed * .65f);
+                    player.rect.Y += (int)(speed * .65f);
+                    player.rect.X += (int)(speed * .65f);
                    // Move(player, Direction.Down);
                    // Move(player, Direction.Right);
                     break;
                 case Direction.DownLeft:
 
-                    player.player.Y += (int)(player.speed * .65f); 
-                    player.player.X -= (int)(player.speed * .65f);
+                    player.rect.Y += (int)(speed * .65f); 
+                    player.rect.X -= (int)(speed * .65f);
                     // Move(player, Direction.Down);
                     // Move(player, Direction.Left);
                     break;
@@ -206,13 +431,13 @@ namespace StarterGame
 
         private void CalcSpeed(Player player)
         {
-            if (player.speed + player.acceleration > maxSpeed)
+            if (speed + player.acceleration > maxSpeed)
             {
-                player.speed = maxSpeed;
+                speed = maxSpeed;
                 return;
             }
             else
-                player.speed += player.acceleration;
+                speed += player.acceleration;
         }
 
         public double EaseOutQuad (double t, double b, double c, double d)
@@ -221,75 +446,7 @@ namespace StarterGame
             return -c * t * (t - 2) + b;
         }
 
-        public void UpdateJump(Player player, double elapsedTime, SoundEffect sound, SoundEffect landingSound, SoundEffect trickSound, Song grindSong, List<Platform> platforms, SoundEffect wreckSound, DustCloud dustCloud)
-        {
-            player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
 
-            foreach (Platform p in platforms)
-            {
-                if (p.type == PlatformType.Rail && player.trickState == TrickState.Grinding && player.player.Intersects(p.rect))
-                {
-                    player.player.Y = p.rect.Y - 150 + (player.player.X / 2);
-                    Move(player, player.jumpDirection);
-                    return;
-                }
-                if (player.state == State.Grounded)
-                {
-                    if (player.direction == Direction.Right && player.player.Right > p.rect.Right && jumpHeight == 0)
-                    {
-                        Fall(player);
-                    }
-                }
-            }
-
-            if (player.state == State.Grounded)
-            {
-                if (Mouse.GetState().RightButton == ButtonState.Pressed)
-                {
-                    sound.Play();
-                    player.state = State.Popped;
-                    return;
-                }
-            }
-            if (player.state == State.Popped)
-            {
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed && Mouse.GetState().RightButton == ButtonState.Pressed)
-                {
-                    Jump(player);
-                }
-            }
-
-            if (player.state == State.Jumping)
-            {
-                CheckTrick(player, elapsedTime, platforms, grindSong);      // need for grinding
-
-                player.player.Y += player.jumpspeed;
-                player.jumpspeed += 1;
-
-                if (player.player.Y >= player.startPosition + jumpHeight)
-                {
-                    dustCloud.Draw(player.player.X, player.player.Y);
-                    if (player.trickState == TrickState.Kickflip && player.trickframe < 7 && player.trickframe > 4)
-                    {
-                        player.wreckFrame = player.trickframe;
-                        wreckSound.Play();
-                        player.state = State.Wreck;
-                        player.trickState = TrickState.None;
-                        return;
-                    }
-
-                    landingSound.Play();
-                    player.state = State.Grounded;
-                    if (player.trickState == TrickState.Kickflip || player.trickState == TrickState.Grinding)
-                    {
-                        Microsoft.Xna.Framework.Media.MediaPlayer.Pause();
-                        player.trickState = TrickState.None;
-                        trickSound.Play();
-                    }
-                    return;
-                }
-            }
-        }
 
         private void Push(Player player, double elapsedTime)
         {
@@ -299,8 +456,8 @@ namespace StarterGame
                 player.state = State.Push;
                 maxSpeed = 16;
                // player.acceleration = 6;
-                player.player.Width = (Utilities.Scale(36, 3.75));
-                player.player.Height = (Utilities.Scale(36, 3.75));
+                player.rect.Width = (Utilities.Scale(36, 3.75));
+                player.rect.Height = (Utilities.Scale(36, 3.75));
             }
             timer += elapsedTime;
             
@@ -315,8 +472,8 @@ namespace StarterGame
                 timer = 0;
                 player.state = State.Grounded;
                 maxSpeed = 8;
-                player.player.Width = (75);
-                player.player.Height = (120);
+                player.rect.Width = (75);
+                player.rect.Height = (120);
             }
         }
 
@@ -325,9 +482,9 @@ namespace StarterGame
             if (player.state != State.Jumping)
             {
                 player.state = State.Jumping;
-                player.jumpspeed = -16;
+                jumpSpeed = -16;
                 player.acceleration = 0;
-                player.startPosition = player.player.Y - jumpHeight;
+                player.startPosition = player.rect.Y - jumpHeight;
             }
         }
 
@@ -336,14 +493,18 @@ namespace StarterGame
             if (player.state != State.Jumping)
             {
                 player.state = State.Jumping;
-                player.jumpspeed = -4;
+                jumpSpeed = -4;
 
-                player.startPosition = player.player.Y - jumpHeight;
+                player.startPosition = player.rect.Y - jumpHeight;
             }
         }
 
-        private void CheckTrick(Player player, double elapsedTime, List<Platform> platforms, Song grindSong)
+        private void CheckTrick(Player player, double elapsedTime, List<Platform> platforms)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            {
+                player.trickState = TrickState.Kickflip;
+            }
             if (player.trickState == TrickState.Kickflip)
             {
                 player.timer += elapsedTime;
@@ -358,37 +519,41 @@ namespace StarterGame
                     }
                     player.timer = 0f;
                 }
-                return;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
-            {
-                player.trickState = TrickState.Kickflip;
             }
 
-            foreach (Platform p in platforms)
+
+            foreach (Platform p in platforms)    // grinding logic
             {
-                if (p.type == PlatformType.Rail)
+                if (player.state != State.Grinding && p.type == PlatformType.Rail)
                 {
-                    if (player.player.Right > p.rect.Left && Mouse.GetState().LeftButton == ButtonState.Pressed && player.player.X - p.rect.Top < 60 && player.player.X - p.rect.Top > -10)
+                   // if (player.rect.Right > p.rect.Left + 50 && player.rect.Left < p.rect.Right - 50 && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -10)
+                   if (player.rect.Right > p.rect.Left)
                     {
-                        player.trickState = TrickState.Grinding;
-                        player.depthLayer = .1f;
-                        MediaPlayer.Play(grindSong);
-                        player.player.Y = p.rect.Y - 100;
+                        p.intersects = true;
+                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            player.state = State.Grinding;
+                            player.depthLayer = .1f;
+                            MediaPlayer.Play(Game1.grindSong);
+                            player.rect.Y = p.rect.Y - 100;
+                            p.intersects = false;
+                        }
+                        return;
                     }
+                    else
+                        p.intersects = false;
                 }
             }
-
         }
 
         public void RampCheck(Player player, Rectangle ramp)
         {
-            if (player.player.Intersects(ramp))
+            if (player.rect.Intersects(ramp))
             {
                 player.boxcheck = true;
-                if (player.direction != Direction.Left && player.player.Right > ramp.Left + 100 && player.player.Left < ramp.Right - 1)
+                if (player.direction != Direction.Left && player.rect.Right > ramp.Left + 100 && player.rect.Left < ramp.Right - 1)
                 {
-                    if (player.player.Right > ramp.Right)
+                    if (player.rect.Right > ramp.Right)
                     {
                         Move(player, Direction.Right);
                         return;
@@ -400,7 +565,7 @@ namespace StarterGame
                         Move(player, Direction.DownRight);
                     }
                 }
-                if (player.direction == Direction.Left && (player.player.Left + 5) < ramp.Right)
+                if (player.direction == Direction.Left && (player.rect.Left + 5) < ramp.Right)
                 {
                     //acceleration *= .85f;
                     if (friction < maxFriction)
@@ -412,13 +577,13 @@ namespace StarterGame
                     Move(player, Direction.Left);
                     Move(player, Direction.Left);
                 }
-                if (player.player.Bottom - ramp.Top >= 100 && player.player.Bottom - ramp.Top <= 110)
+                if (player.rect.Bottom - ramp.Top >= 100 && player.rect.Bottom - ramp.Top <= 110)
                 {
-                    player.collide = Direction.Down;
+                    collide = Direction.Down;
                 }
-                if ((player.player.Top - ramp.Bottom) <= -80 && (player.player.Top - ramp.Bottom) >= -90)
+                if ((player.rect.Top - ramp.Bottom) <= -80 && (player.rect.Top - ramp.Bottom) >= -90)
                 {
-                    player.collide = Direction.Up;
+                    collide = Direction.Up;
                 }
             }
         }

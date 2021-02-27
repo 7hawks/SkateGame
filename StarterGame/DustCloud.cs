@@ -1,7 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StarterGame
 {
@@ -18,12 +15,9 @@ namespace StarterGame
 
         public Rectangle rect;
 
-
-
-        public DustCloud(int inputWidth, int inputHeight)
+        public DustCloud()
         {
             frame = 0;
-            
         }
 
 
@@ -48,23 +42,17 @@ namespace StarterGame
 
         public Rectangle Update(double elapsedTime)
         {
-            if (frame > lifeTime)
+            if (frame > lifeTime) // dustcloud is done so return basic Rectangle
             {
                 frame = 0;
                 timer = 0;
                 active = false;
+                return new Rectangle(); 
             }
 
             Animate(elapsedTime);
 
-            if (frame > lifeTime)
-            {
-                active = false;
-                frame = 0;
-            }
             return new Rectangle(frame * 28, 0, 28, 15);
         }
-
-
     }
 }
