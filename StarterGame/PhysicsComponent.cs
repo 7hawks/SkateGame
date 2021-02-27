@@ -76,6 +76,19 @@ namespace StarterGame
             if (player.state != State.Grinding)
                 return;
 
+            if (player.rect.Y >= player.startPosition + jumpHeight)
+            {
+/*                foreach (Platform p in platforms)
+                {
+                    p.intersects = false;
+                }*/
+                Game1.landingSound.Play();
+                player.state = State.Grounded;
+                MediaPlayer.Pause();
+                player.trickState = TrickState.None;
+                Game1.trickSound.Play();
+            }
+
             foreach (Platform p in platforms)
             {
                 if (p.type == PlatformType.Rail && player.rect.Intersects(p.rect))
@@ -83,7 +96,6 @@ namespace StarterGame
                     return;
                 }
             }
-
             player.state = State.Jumping;
         }
 
@@ -91,100 +103,95 @@ namespace StarterGame
         public void Update(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
 
-            /*            switch (player.state)
+            foreach (Platform p in platforms)
+            {
+                if (p.type == PlatformType.Rail)
+                {
+                    if (player.rect.Right > p.rect.Left && player.rect.Left < p.rect.Right && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -200) // for testing purposes
+                    {
+                        p.intersects = true;
+
+                    }
+                    else
+                        p.intersects = false;
+                }
+
+            }
+
+
+                player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
+            switch (player.state)
+            {
+                case State.Jumping:
+                    UpdateJump(player, elapsedTime, platforms, dustCloud);
+                    CheckGrind(player, platforms);
+                    if (player.input.direction == Direction.Up)   // prevents being able to super jump by pressing UP while jumping
+                        Move(player, player.jumpDirection);
+                    else
+                        Move(player, player.input.direction); 
+                    break;
+                case State.Grounded:
+                    UpdateJump(player, elapsedTime, platforms, dustCloud);
+
+                    foreach ( Platform p in platforms)
+                    {
+                        if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0)
                         {
-                            case State.Jumping:
-                                UpdateJump(player, elapsedTime, platforms, dustCloud);
-                                break;
-                            case State.Grounded:
-                                if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                                {
-                                    Push(player, elapsedTime);
-                                }
-                                break;
-                            case State.Grinding:
-                                UpdateGrind(player, platforms);
-                                break;
-                            case State.Push:
-                                Push(player, elapsedTime);
-                                break;
+                            Fall(player);
+                        }
+                    }
 
+                    if (speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
+                    {
+                        if (player.acceleration > 0 && player.acceleration > .00001)
+                        {
+                            player.acceleration *= .95f;
+                        }
 
-                        }*/
+                        if (speed > 0 && speed > .0001)
+                        {
+                            speed *= .9f;
+                        }
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                    {
+                        Push(player, elapsedTime);
+                    }
 
+                    if (player.input.direction == Direction.None && player.acceleration > .01)
+                    {
+                        Move(player, player.input.prevDirection);
+                        return;
+                    }
+                    Move(player, player.input.direction);
+                    break;
+                case State.Grinding:
+                    UpdateGrind(player, platforms);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) || player.state == State.Push)
-            {
-                Push(player, elapsedTime);
+                    Move(player, player.jumpDirection);
+                    break;
+                case State.Popped:
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed && Mouse.GetState().RightButton == ButtonState.Pressed)
+                    {
+                        Jump(player);
+                    }
+                    break;
+                case State.Push:
+                    Push(player, elapsedTime);
+                    if (player.input.direction == Direction.None)
+                    {
+                        Move(player, player.input.prevDirection);
+                    }
+                    else
+                        Move(player, player.input.direction);
+
+                    break;
             }
-
-            if (player.state == State.Grinding)
-            {
-                UpdateGrind(player, platforms);
-            }
-
-            UpdateJump(player, elapsedTime, platforms, dustCloud);
-
-         
-
-            if (player.state == State.Grounded && speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
-            {
-
-                if (player.acceleration > 0 && player.acceleration > .00001)
-                {
-                    player.acceleration *= .95f;
-                }
-                
-                if (speed > 0 && speed > .0001)
-                {
-                    speed *= .9f;
-                }
-            }
-
-            if (player.input.direction == Direction.None && player.acceleration > .01) 
-            {
-                Move(player, player.input.prevDirection);
-                return;
-            }
-            else if (player.state == State.Grinding)   // restrict movement to left and right while grinding
-            {
-                Move(player, player.jumpDirection);
-            }
-            else if (player.state == State.Jumping && player.input.direction == Direction.Up)   // prevents being able to super jump by pressing UP while jumping
-                Move(player, player.jumpDirection);
-            else
-                Move(player, player.input.direction);
         }
 
 
         public void UpdateJump(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
-            player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
-
-            /*            if (player.trickState == TrickState.Grinding)
-                        {
-                            Move(player, player.jumpDirection);
-                            return;
-                        }*/
-
-            foreach (Platform p in platforms)
-            {
-                if (p.type == PlatformType.Rail && player.state == State.Grinding && player.rect.Intersects(p.rect))
-                {
-                    // player.rect.Y = p.rect.Y - 150 + (player.rect.X / 2);    // angle rail logic
-                    //wwww player.rect.Y = p.rect.Y - 150;
-                    Move(player, player.jumpDirection);
-                    return;
-                }
-                if (player.state == State.Grounded)
-                {
-                    if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0)
-                    {
-                        Fall(player);
-                    }
-                }
-            }
-
             switch (player.state)
             {
                 case State.Grounded:
@@ -195,29 +202,9 @@ namespace StarterGame
                         return;
                     }
                     break;
-                case State.Popped:
-                    if (Mouse.GetState().LeftButton == ButtonState.Pressed && Mouse.GetState().RightButton == ButtonState.Pressed)
-                    {
-                        Jump(player);
-                    }
-                    break;
-                case State.Grinding:
-                    if (player.rect.Y >= player.startPosition + jumpHeight)
-                    {
-                        foreach (Platform p in platforms)
-                        {
-                            p.intersects = false;
-                        }
-                        Game1.landingSound.Play();
-                        player.state = State.Grounded;
-                        MediaPlayer.Pause();
-                        player.trickState = TrickState.None;
-                        Game1.trickSound.Play();
-                    }
-                    return;
 
                 case State.Jumping:
-                    CheckTrick(player, elapsedTime, platforms);      // need for grinding
+                    CheckKickFlip(player, elapsedTime, platforms);   
 
                     player.rect.Y += jumpSpeed;
                     jumpSpeed += 1;
@@ -246,51 +233,6 @@ namespace StarterGame
                     }
                     break;
             }
-
-            /*            if (player.state == State.Grinding)
-                        {
-                            if (player.rect.Y >= player.startPosition + jumpHeight)
-                            {
-                                Game1.landingSound.Play();
-                                player.state = State.Grounded;
-                                MediaPlayer.Pause();
-                                player.trickState = TrickState.None;
-                                Game1.trickSound.Play();
-
-                            }
-                            return;
-                        }*/
-
-            /*            if (player.state == State.Jumping )
-                        {
-                            CheckTrick(player, elapsedTime, platforms);      // need for grinding
-
-                            player.rect.Y += jumpSpeed;
-                            jumpSpeed += 1;
-
-                            if (player.rect.Y >= player.startPosition + jumpHeight)
-                            {
-                                dustCloud.Draw(player.rect.X, player.rect.Y);
-                                if (player.trickState == TrickState.Kickflip && player.trickframe < 7 && player.trickframe > 4)
-                                {
-                                    player.wreckFrame = player.trickframe;
-                                    Game1.wreckSound.Play();
-                                    player.state = State.Wreck;
-                                    player.trickState = TrickState.None;
-                                    return;
-                                }
-
-                                Game1.landingSound.Play();
-                                player.state = State.Grounded;
-                                if (player.trickState == TrickState.Kickflip || player.state == State.Grinding)
-                                {
-                                    MediaPlayer.Pause();
-                                    player.trickState = TrickState.None;
-                                    Game1.trickSound.Play();
-                                }
-                                return;
-                            }
-                        }*/
         }
 
 
@@ -447,7 +389,6 @@ namespace StarterGame
         }
 
 
-
         private void Push(Player player, double elapsedTime)
         {
             player.acceleration = 8;
@@ -472,9 +413,24 @@ namespace StarterGame
                 timer = 0;
                 player.state = State.Grounded;
                 maxSpeed = 8;
+                player.state = State.Grounded;
                 player.rect.Width = (75);
                 player.rect.Height = (120);
+
+/*                if (maxSpeed > 8)
+                {
+                    maxSpeed *= .9f;
+                    return;
+                }
+                else
+                {
+
+                }*/
+
             }
+
+
+
         }
 
         private void Jump(Player player)
@@ -499,7 +455,33 @@ namespace StarterGame
             }
         }
 
-        private void CheckTrick(Player player, double elapsedTime, List<Platform> platforms)
+
+        public void CheckGrind(Player player, List<Platform> platforms)
+        {
+            foreach (Platform p in platforms)
+            {
+                if (player.state != State.Grinding && p.type == PlatformType.Rail)
+                {
+                    if (player.rect.Right > p.rect.Left && player.rect.Left < p.rect.Right && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -200)
+                    {
+
+                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            player.state = State.Grinding;
+                            player.depthLayer = .1f;
+                            MediaPlayer.Play(Game1.grindSong);
+                            player.rect.Y = p.rect.Y - 100;
+                        }
+                        return;
+                    }
+                    else
+                        p.intersects = false;
+                }
+            }
+        }
+
+
+        private void CheckKickFlip(Player player, double elapsedTime, List<Platform> platforms)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.F))
             {
@@ -518,30 +500,6 @@ namespace StarterGame
                         player.trickframe = 3;
                     }
                     player.timer = 0f;
-                }
-            }
-
-
-            foreach (Platform p in platforms)    // grinding logic
-            {
-                if (player.state != State.Grinding && p.type == PlatformType.Rail)
-                {
-                   // if (player.rect.Right > p.rect.Left + 50 && player.rect.Left < p.rect.Right - 50 && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -10)
-                   if (player.rect.Right > p.rect.Left)
-                    {
-                        p.intersects = true;
-                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                        {
-                            player.state = State.Grinding;
-                            player.depthLayer = .1f;
-                            MediaPlayer.Play(Game1.grindSong);
-                            player.rect.Y = p.rect.Y - 100;
-                            p.intersects = false;
-                        }
-                        return;
-                    }
-                    else
-                        p.intersects = false;
                 }
             }
         }

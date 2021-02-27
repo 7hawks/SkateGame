@@ -9,7 +9,7 @@ namespace StarterGame
 {
     public class Game1 : Game
     {
-        public static (int width, int height) view = (1280, 920);
+        public static (int width, int height) view = (1480, 920);
         private const double scale = 3.75;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
