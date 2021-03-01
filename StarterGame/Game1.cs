@@ -164,7 +164,7 @@ namespace StarterGame
                 foreach (Platform p in platforms) { 
                     if (p.intersects)
                     {
-                        spriteBatch.Draw(p.sprite, p.rect, null, Color.Red, 0, new Vector2(0, 0), SpriteEffects.None, .25f);
+                        spriteBatch.Draw(p.sprite, p.rect, null, Color.YellowGreen, 0, new Vector2(0, 0), SpriteEffects.None, .25f);
                         break;
                     }
                     else
@@ -195,6 +195,7 @@ namespace StarterGame
 
                 spriteBatch.DrawString(font, "JumpHeight: " + player1.physics.jumpHeight, new Vector2(400, 40), Color.Pink);
                 spriteBatch.DrawString(font, "jump Direction: " + player1.jumpDirection, new Vector2(0, 300), Color.Black);
+                spriteBatch.DrawString(font, "prevDirection: " + player1.input.prevDirection, new Vector2(0, 340), Color.Black);
                 spriteBatch.DrawString(font, "inputDirection: " + player1.input.direction, new Vector2(0, 400), Color.Black);
                 spriteBatch.DrawString(font, "dustCloud active: " + dustCloud.active, new Vector2(0, 440), Color.Black);
 

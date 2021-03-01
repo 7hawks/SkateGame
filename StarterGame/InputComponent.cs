@@ -42,14 +42,21 @@ namespace StarterGame
                     break;
                 default:
 
-                    if (player.direction!= Direction.None)
+/*                    if (player.direction!= Direction.None)
                     {
                         prevDirection = player.direction;
                     }
 
-                    direction = Direction.None;
+                    direction = Direction.None;*/
                     break;
             }
+/*            if (player.direction != Direction.None)
+            {
+                prevDirection = player.direction;
+            }
+            else
+                direction = Direction.None;*/
+
         }
 
         public void UpdateMouse()
@@ -79,23 +86,40 @@ namespace StarterGame
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 prevKeyX = Keys.A;
+                if (direction != Direction.None && direction != Direction.Left)
+                {
+                    prevDirection = direction;
+                }
                 direction = Direction.Left;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 prevKeyY = Keys.W;
+                if (direction != Direction.None && direction != Direction.Up)
+                {
+                    prevDirection = direction;
+                }
                 direction = Direction.Up;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 prevKeyY = Keys.S;
+                if (direction != Direction.None && direction != Direction.Down)
+                {
+                    prevDirection = direction;
+                }
                 direction = Direction.Down;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 prevKeyX = Keys.D;
+                if (direction != Direction.None && direction != Direction.Right)
+                {
+                    prevDirection = direction;
+                }
                 direction = Direction.Right;
             }
+          //  prevDirection = direction;
         }
 
         private void TwoButtonPress()
@@ -148,7 +172,6 @@ namespace StarterGame
                 if (prevKeyX == Keys.A)
                 {
                     direction = Direction.UpLeft;
-
                 }
                 else
                     direction = Direction.UpRight;
@@ -158,11 +181,9 @@ namespace StarterGame
                 if (prevKeyY == Keys.W)
                 {
                     direction = Direction.UpRight;
-
                 }
                 else
                     direction = Direction.DownRight;
-
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.W))
             {
@@ -172,7 +193,6 @@ namespace StarterGame
                 }
                 else
                     direction = Direction.DownLeft;
-
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.D))
             {

@@ -11,11 +11,13 @@ namespace StarterGame
     
     public class PhysicsComponent : IGameComponent
     {
+        const float accelFactor = .2f;
         const int bounds = 3;
         public int jumpSpeed;
         public float speed;
         private const float maxAcceleration = 4;
-        public  float maxSpeed = 8f;
+        public float maxSpeed = 8f;
+        public  float minSpeed = -8f;
         public float friction = 0.00029f;
         public const double maxFriction = 1;
         public int jumpHeight { get; set; }
@@ -33,6 +35,19 @@ namespace StarterGame
             pushFrame = 0;
             speed = 0;
             timer = 0;
+        }
+
+
+        private void CalcSpeed(Player player)
+        {
+            if (speed + player.acceleration > maxSpeed)
+            {
+                speed = maxSpeed;
+                return;
+            }
+            else
+                speed += .2f;
+            //  speed += player.acceleration;
         }
 
         /// <summary>
@@ -71,6 +86,18 @@ namespace StarterGame
             collide = Direction.None;
         }
 
+        public void Decelerate(float acceleration)
+        {
+            if (speed - acceleration < minSpeed)
+            {
+                speed = minSpeed;
+                return;
+            }
+            else
+                speed -= acceleration;
+
+        }
+
         public void UpdateGrind(Player player, List<Platform> platforms)
         {
             if (player.state != State.Grinding)
@@ -105,19 +132,17 @@ namespace StarterGame
 
             foreach (Platform p in platforms)
             {
-                if (p.type == PlatformType.Rail)
+                if (p.type == PlatformType.Rail) // for testing purposes
                 {
-                    if (player.rect.Right > p.rect.Left && player.rect.Left < p.rect.Right && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -200) // for testing purposes
+                    if (player.rect.Right > p.rect.Left && player.rect.Left < p.rect.Right && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -200) 
                     {
                         p.intersects = true;
-
                     }
                     else
                         p.intersects = false;
                 }
 
             }
-
 
                 player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
             switch (player.state)
@@ -141,24 +166,36 @@ namespace StarterGame
                         }
                     }
 
-                    if (speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
+                    if (speed > .0001 && player.input.direction == Direction.None && player.input.prevDirection == Direction.Right)  // decelerate when not actively moving
                     {
-                        if (player.acceleration > 0 && player.acceleration > .00001)
+                        if (player.acceleration > .00001)
                         {
                             player.acceleration *= .95f;
                         }
+                        
+                        speed *= .9f;
+                        
+                    }
+                    else if (speed < 0 && player.input.direction == Direction.None && player.input.prevDirection == Direction.Left)  // decelerate when not actively moving
+                    {
+/*                        if (player.acceleration > .00001)
+                        {*/
+                            player.acceleration *= .95f;
+                        //}
 
-                        if (speed > 0 && speed > .0001)
+                        if (speed < 0 && speed < .0001)
                         {
                             speed *= .9f;
                         }
                     }
+
+
                     if (Keyboard.GetState().IsKeyDown(Keys.Space))
                     {
                         Push(player, elapsedTime);
                     }
 
-                    if (player.input.direction == Direction.None && player.acceleration > .01)
+                    if (player.input.direction == Direction.None)
                     {
                         Move(player, player.input.prevDirection);
                         return;
@@ -171,6 +208,10 @@ namespace StarterGame
                     Move(player, player.jumpDirection);
                     break;
                 case State.Popped:
+                    if (player.input.rightMouseRelease)
+                    {
+                        player.state = State.Grounded;
+                    }
                     if (Mouse.GetState().LeftButton == ButtonState.Pressed && Mouse.GetState().RightButton == ButtonState.Pressed)
                     {
                         Jump(player);
@@ -184,7 +225,6 @@ namespace StarterGame
                     }
                     else
                         Move(player, player.input.direction);
-
                     break;
             }
         }
@@ -241,23 +281,11 @@ namespace StarterGame
             throw new NotImplementedException();
         }
 
-        public void Decelerate()
-        {
-            if (!decelerate)
-            {
-                decelerate = true;
-            }
-        }
+
 
         private void Move(Player player, Direction inputDirection)
         {
-            if (player.state == State.Wreck)
-                return;
 
-            if (player.state == State.Popped && player.input.rightMouseRelease)
-            {
-                player.state = State.Grounded;
-            }
 
             if (player.state != State.Jumping && player.input.direction != Direction.None && player.acceleration + .4f < maxAcceleration)
             {
@@ -265,51 +293,61 @@ namespace StarterGame
             }
 
 
-            /*            if (collide == inputDirection)
-                        {
-                            collide = Direction.None;
-                            return;
-                        }*/
-            if (inputDirection != player.direction && speed > 2)
-            {
-                if (inputDirection == Direction.Left && player.direction == Direction.Right)
-                {
-                    speed -= .2f;
-
-                    player.rect.X += (int)speed;
-                    player.rect.X += (int)speed;
-
-                    return;
-                }
-                else if (inputDirection == Direction.Right && player.direction == Direction.Left)
-                {
-
-                    Decelerate();
-
-                    speed -= .2f;
-
-                    player.rect.X -= (int)speed;
-                    player.rect.X -= (int)speed;
-
-                    return;
-                }
-                player.direction = inputDirection;
-            }
-
-            CalcSpeed(player);
-
             switch (inputDirection)
             {
                 case Direction.Up:
                     if (player.rect.Top <= 100)
                         return;
 
-                    player.rect.Y -= (int)speed;
-                    break;
+/*                    if (player.input.prevDirection == Direction.Right && speed > 0)
+                    {
+                        speed *= -1;
+                    }*/
+                    if ( speed > 0)
+                    {
+                        speed *= -1;
+                    }
 
+                    Decelerate(accelFactor);
+                    player.rect.Y += (int)speed;
+                    break;
+                case Direction.Left:
+                    if (player.physics.collide == inputDirection)
+                    {
+                        return;
+                    }
+                    if (player.rect.Left <= 0)
+                        return;
+
+
+/*                    if (player.input.prevDirection != Direction.Right && speed > 0)
+                    {
+                        speed *= -1;
+                    }*/
+
+
+                    Decelerate(accelFactor);
+                    if (inputDirection != player.input.prevDirection && speed > 0)
+                    {
+                            player.rect.X -= (int)speed;
+                    }
+                    else
+                    {
+                        player.rect.X += (int)speed;
+                    }
+                    
+                    player.jumpDirection = Direction.Left;
+                    break;
                 case Direction.Right:
                     if (player.rect.Right >= Game1.view.width)
                         return;
+/*
+                    if (player.input.prevDirection != Direction.Left && speed < 0)
+                    {
+                        speed *= -1;
+                    }*/
+
+                    CalcSpeed(player);
 
                     player.rect.X += (int)speed;
                     player.jumpDirection = Direction.Right;
@@ -323,64 +361,66 @@ namespace StarterGame
                         return;
                     }
 
-                    player.rect.Y += (int)speed; ;
-                    break;
-                case Direction.Left:
-                    if (player.physics.collide == inputDirection)
+                    if (player.input.prevDirection == Direction.Left && speed < 0)
                     {
-                        return;
+                        speed *= -1;
                     }
 
-                    if (player.rect.Left <= 0)
-                        return;
+                    CalcSpeed(player);
 
-                    player.rect.X -= (int)speed;
-                    player.jumpDirection = Direction.Left;
+                    player.rect.Y += (int)speed; 
                     break;
+
                 case Direction.UpLeft:
                     if (player.physics.collide == inputDirection)
                     {
                         Move(player, Direction.Up);
-                        return;
+                       // return;
                     }
-                    player.rect.Y -= (int)(speed * .65f);
-                    player.rect.X -= (int)(speed * .65f);
-                  //  Move(player, Direction.Up);
-                   // Move(player, Direction.Left);
+
+                    if (speed > 0)
+                    {
+                        player.rect.Y -= (int)(speed * .65f);
+                        player.rect.X -= (int)(speed * .65f);
+                    }
+                    else
+                    {
+                        player.rect.Y += (int)(speed * .65f);
+                        player.rect.X += (int)(speed * .65f);
+                    }
+
                     break;
                 case Direction.UpRight:
-                    player.rect.Y -= (int)(speed * .65f);
-                    player.rect.X += (int)(speed * .65f);
-                    //Move(player, Direction.Up);
-                   // Move(player, Direction.Right);
+                    if (speed > 0)
+                    {
+                        player.rect.Y -= (int)(speed * .65f);
+                        player.rect.X += (int)(speed * .65f);
+                    }
+                    else
+                    {
+                        player.rect.Y += (int)(speed * .65f);
+                        player.rect.X -= (int)(speed * .65f);
+                    }
+
+
                     break;
                 case Direction.DownRight:
                     player.rect.Y += (int)(speed * .65f);
                     player.rect.X += (int)(speed * .65f);
-                   // Move(player, Direction.Down);
-                   // Move(player, Direction.Right);
                     break;
+/*                    player.rect.Y += (int)(speed * .65f);
+                    player.rect.X += (int)(speed * .65f);
+                    break;*/
                 case Direction.DownLeft:
 
                     player.rect.Y += (int)(speed * .65f); 
-                    player.rect.X -= (int)(speed * .65f);
-                    // Move(player, Direction.Down);
-                    // Move(player, Direction.Left);
+                    player.rect.X += (int)(speed * .65f);
                     break;
             }
             player.direction = inputDirection;
         }
 
-        private void CalcSpeed(Player player)
-        {
-            if (speed + player.acceleration > maxSpeed)
-            {
-                speed = maxSpeed;
-                return;
-            }
-            else
-                speed += player.acceleration;
-        }
+
 
         public double EaseOutQuad (double t, double b, double c, double d)
         {
