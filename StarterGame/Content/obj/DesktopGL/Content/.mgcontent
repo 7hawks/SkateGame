@@ -37,6 +37,7 @@
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skatePop.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skatePop2.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetPush.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetRefactor.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetWreck.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSpritesheetGrind.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/smileyBlue.png</File>
@@ -54,6 +55,7 @@
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/yellowPixel.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

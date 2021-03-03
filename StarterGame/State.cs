@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace StarterGame
 {
     public enum State
@@ -12,6 +9,7 @@ namespace StarterGame
         Popped,
         Push,
         Ramp,
+        SlowDown,
         Wreck
     }
 }

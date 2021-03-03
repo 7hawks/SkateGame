@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace StarterGame
 {
@@ -15,18 +13,19 @@ namespace StarterGame
         public int jumpSpeed;
         public float speed;
         private const float maxAcceleration = 4;
-        public  float maxSpeed = 8f;
+        public  float maxSpeed = 9f;
         public float friction = 0.00029f;
         public const double maxFriction = 1;
         public int jumpHeight { get; set; }
-        private bool decelerate;
         public int pushFrame;
         private const int pushInterval = 100;
         private double timer;
         public Direction collide;
+        public Direction slowDownDirection;
 
         public PhysicsComponent()
         {
+            slowDownDirection = Direction.None;
             collide = Direction.None;
             jumpHeight = 0;
             jumpSpeed = 0;
@@ -99,27 +98,23 @@ namespace StarterGame
             player.state = State.Jumping;
         }
 
-
         public void Update(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
-
             foreach (Platform p in platforms)
             {
-                if (p.type == PlatformType.Rail)
+                if (p.type == PlatformType.Rail) // this bool is used for the RAIL color to know when the rail is grindable
                 {
-                    if (player.rect.Right > p.rect.Left && player.rect.Left < p.rect.Right && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -200) // for testing purposes
+                    if (player.rect.Right > p.rect.Left && player.rect.Left < p.rect.Right && player.rect.Y - p.rect.Top <= 100 && player.rect.Y - p.rect.Top >= -200) 
                     {
                         p.intersects = true;
-
                     }
                     else
                         p.intersects = false;
                 }
-
             }
 
+            player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
 
-                player.state = player.wreck.WreckCheck(player.state, elapsedTime, player);
             switch (player.state)
             {
                 case State.Jumping:
@@ -128,35 +123,39 @@ namespace StarterGame
                     if (player.input.direction == Direction.Up)   // prevents being able to super jump by pressing UP while jumping
                         Move(player, player.jumpDirection);
                     else
-                        Move(player, player.input.direction); 
+                        Move(player, player.jumpDirection); 
                     break;
                 case State.Grounded:
+
+                    if(player.direction == Direction.None && player.input.direction == Direction.None && speed < .5)
+                    {
+                        speed = 0;
+                        return;
+                    }
+
                     UpdateJump(player, elapsedTime, platforms, dustCloud);
+
+                    
 
                     foreach ( Platform p in platforms)
                     {
-                        if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0)
-                        {
-                            Fall(player);
-                        }
+                        if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0) { Fall(player); }
                     }
 
                     if (speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
                     {
-                        if (player.acceleration > 0 && player.acceleration > .00001)
-                        {
-                            player.acceleration *= .95f;
-                        }
+                        if (player.acceleration > 0 && player.acceleration > .00001) { player.acceleration *= .95f; }
 
-                        if (speed > 0 && speed > .0001)
-                        {
-                            speed *= .9f;
-                        }
+                        if (speed > 0 && speed > .0001) { speed *= .9f; }
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                    {
-                        Push(player, elapsedTime);
-                    }
+
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space)) { Push(player, elapsedTime); }
+
+/*                    if (player.input.direction != player.direction && speed > 0) 
+                    { 
+                        Move()
+                        return; 
+                    }*/
 
                     if (player.input.direction == Direction.None && player.acceleration > .01)
                     {
@@ -167,10 +166,15 @@ namespace StarterGame
                     break;
                 case State.Grinding:
                     UpdateGrind(player, platforms);
+                    UpdateJump(player, elapsedTime, platforms, dustCloud);
 
                     Move(player, player.jumpDirection);
                     break;
                 case State.Popped:
+                    if (player.input.rightMouseRelease)
+                    {
+                        player.state = State.Grounded;
+                    }
                     if (Mouse.GetState().LeftButton == ButtonState.Pressed && Mouse.GetState().RightButton == ButtonState.Pressed)
                     {
                         Jump(player);
@@ -178,30 +182,35 @@ namespace StarterGame
                     break;
                 case State.Push:
                     Push(player, elapsedTime);
-                    if (player.input.direction == Direction.None)
-                    {
-                        Move(player, player.input.prevDirection);
-                    }
+                    if (player.input.direction == Direction.None) { Move(player, player.input.prevDirection); }
                     else
                         Move(player, player.input.direction);
+                    break;
+                case State.SlowDown:
 
                     break;
             }
         }
 
-
         public void UpdateJump(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
+            if ((player.state == State.Grounded || player.state == State.Grinding) && (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.K)))
+            {
+                Game1.popSound.Play();
+                player.state = State.Popped;
+                return;
+            }
+
             switch (player.state)
             {
-                case State.Grounded:
+/*                case State.Grounded:
                     if (Mouse.GetState().RightButton == ButtonState.Pressed)
                     {
                         Game1.popSound.Play();
                         player.state = State.Popped;
                         return;
                     }
-                    break;
+                    break;*/
 
                 case State.Jumping:
                     CheckKickFlip(player, elapsedTime, platforms);   
@@ -241,60 +250,60 @@ namespace StarterGame
             throw new NotImplementedException();
         }
 
-        public void Decelerate()
+       
+        private void CalcSpeed(Player player)
         {
-            if (!decelerate)
+            if (speed + player.acceleration > maxSpeed)
             {
-                decelerate = true;
+                speed = maxSpeed;
+                return;
             }
+            else
+                speed += player.acceleration;
+        }
+
+        public double EaseOutQuad (double t, double b, double c, double d)
+        {
+            t /= d;
+            return -c * t * (t - 2) + b;
         }
 
         private void Move(Player player, Direction inputDirection)
         {
-            if (player.state == State.Wreck)
-                return;
+/*            if (player.state == State.Wreck)
+                return;*/
 
-            if (player.state == State.Popped && player.input.rightMouseRelease)
-            {
-                player.state = State.Grounded;
-            }
 
             if (player.state != State.Jumping && player.input.direction != Direction.None && player.acceleration + .4f < maxAcceleration)
             {
                 player.acceleration += .4f;
             }
 
-
-            /*            if (collide == inputDirection)
+            // This is the problem chunk for deceleration
+            /*            if (inputDirection != player.direction && speed > 2)
                         {
-                            collide = Direction.None;
-                            return;
+                            if (inputDirection == Direction.Left && player.direction == Direction.Right)
+                            {
+                                speed -= .2f;
+
+                                player.rect.X += (int)speed;
+                                player.rect.X += (int)speed;
+
+                                return;
+                            }
+                            else if (inputDirection == Direction.Right && player.direction == Direction.Left)
+                            {
+                                Decelerate();
+
+                                speed -= .2f;
+
+                                player.rect.X -= (int)speed;
+                                player.rect.X -= (int)speed;
+
+                                return;
+                            }
+                            player.direction = inputDirection;
                         }*/
-            if (inputDirection != player.direction && speed > 2)
-            {
-                if (inputDirection == Direction.Left && player.direction == Direction.Right)
-                {
-                    speed -= .2f;
-
-                    player.rect.X += (int)speed;
-                    player.rect.X += (int)speed;
-
-                    return;
-                }
-                else if (inputDirection == Direction.Right && player.direction == Direction.Left)
-                {
-
-                    Decelerate();
-
-                    speed -= .2f;
-
-                    player.rect.X -= (int)speed;
-                    player.rect.X -= (int)speed;
-
-                    return;
-                }
-                player.direction = inputDirection;
-            }
 
             CalcSpeed(player);
 
@@ -343,51 +352,24 @@ namespace StarterGame
                         Move(player, Direction.Up);
                         return;
                     }
-                    player.rect.Y -= (int)(speed * .65f);
-                    player.rect.X -= (int)(speed * .65f);
-                  //  Move(player, Direction.Up);
-                   // Move(player, Direction.Left);
+                    player.rect.Y -= (int)(speed * .7f);
+                    player.rect.X -= (int)(speed * .7f);
                     break;
                 case Direction.UpRight:
-                    player.rect.Y -= (int)(speed * .65f);
-                    player.rect.X += (int)(speed * .65f);
-                    //Move(player, Direction.Up);
-                   // Move(player, Direction.Right);
+                    player.rect.Y -= (int)(speed * .7f);
+                    player.rect.X += (int)(speed * .7f);
                     break;
                 case Direction.DownRight:
-                    player.rect.Y += (int)(speed * .65f);
-                    player.rect.X += (int)(speed * .65f);
-                   // Move(player, Direction.Down);
-                   // Move(player, Direction.Right);
+                    player.rect.Y += (int)(speed * .7f);
+                    player.rect.X += (int)(speed * .7f);
                     break;
                 case Direction.DownLeft:
-
-                    player.rect.Y += (int)(speed * .65f); 
-                    player.rect.X -= (int)(speed * .65f);
-                    // Move(player, Direction.Down);
-                    // Move(player, Direction.Left);
+                    player.rect.Y += (int)(speed * .7f);
+                    player.rect.X -= (int)(speed * .7f);
                     break;
             }
             player.direction = inputDirection;
         }
-
-        private void CalcSpeed(Player player)
-        {
-            if (speed + player.acceleration > maxSpeed)
-            {
-                speed = maxSpeed;
-                return;
-            }
-            else
-                speed += player.acceleration;
-        }
-
-        public double EaseOutQuad (double t, double b, double c, double d)
-        {
-            t /= d;
-            return -c * t * (t - 2) + b;
-        }
-
 
         private void Push(Player player, double elapsedTime)
         {
@@ -396,7 +378,6 @@ namespace StarterGame
             {
                 player.state = State.Push;
                 maxSpeed = 16;
-               // player.acceleration = 6;
                 player.rect.Width = (Utilities.Scale(36, 3.75));
                 player.rect.Height = (Utilities.Scale(36, 3.75));
             }
@@ -428,9 +409,6 @@ namespace StarterGame
                 }*/
 
             }
-
-
-
         }
 
         private void Jump(Player player)

@@ -1,7 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StarterGame
 {
@@ -28,7 +25,11 @@ namespace StarterGame
             {
                 return;                         
             }
-
+/*            if (direction != prevDirection)
+            {
+                prevDirection = direction;
+            }*/
+            
             switch (Keyboard.GetState().GetPressedKeys().Length)
             {
                 case 1:
@@ -41,8 +42,7 @@ namespace StarterGame
                     ThreeButtonPress();
                     break;
                 default:
-
-                    if (player.direction!= Direction.None)
+                    if (player.direction != Direction.None)
                     {
                         prevDirection = player.direction;
                     }

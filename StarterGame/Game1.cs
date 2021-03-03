@@ -64,9 +64,9 @@ namespace StarterGame
        
             particleEngine = new ParticleEngine(textures, new Vector2(400, 240));
             platform = new Platform(this.Content.Load<Texture2D>("./platforms/50platform"), 0, 109, Utilities.Scale(71, scale), Utilities.Scale(163, scale), PlatformType.Box);
-            rail = new Platform(this.Content.Load<Texture2D>("./platforms/railLonger"), 400, 700, Utilities.Scale(128, scale), Utilities.Scale(16, scale), PlatformType.Rail);
+            rail = new Platform(this.Content.Load<Texture2D>("./platforms/railLonger"), 400, 500, Utilities.Scale(128, scale), Utilities.Scale(16, scale), PlatformType.Rail);
             platforms = new List<Platform>();
-            platforms.Add(platform);
+          //  platforms.Add(platform);
             platforms.Add(rail);
 
             popSound = Content.Load<SoundEffect>("realSkatePop");
@@ -82,7 +82,7 @@ namespace StarterGame
             //dustCloud = new DustCloud(Utilities.Scale(28, scale), Utilities.Scale(15, scale));
             dustCloud = new DustCloud();
 
-            collissionObj = new CollissionObject(this.Content.Load<Texture2D>("stair10"), PlatformType.Rail);
+         //   collissionObj = new CollissionObject(this.Content.Load<Texture2D>("stair10"), PlatformType.Rail);
             volume = new VolumeButton();
 
             sounds[0] = Content.Load<SoundEffect>("snare 2");
@@ -159,12 +159,12 @@ namespace StarterGame
            
             if (state == GameState.Game)
             {
-                spriteBatch.Draw(collissionObj.logo, collissionObj.block, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .25f);   // stair set
+               // spriteBatch.Draw(collissionObj.logo, collissionObj.block, null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .25f);   // stair set
                 
                 foreach (Platform p in platforms) { 
                     if (p.intersects)
                     {
-                        spriteBatch.Draw(p.sprite, p.rect, null, Color.Red, 0, new Vector2(0, 0), SpriteEffects.None, .25f);
+                        spriteBatch.Draw(p.sprite, p.rect, null, Color.LawnGreen, 0, new Vector2(0, 0), SpriteEffects.None, .25f);
                         break;
                     }
                     else
@@ -187,22 +187,18 @@ namespace StarterGame
                 spriteBatch.DrawString(font, "Coins: " + player1.coinCount, new Vector2(1050, 120), Color.Lime);
                 spriteBatch.DrawString(font, "friction: " + player1.physics.friction, new Vector2(400, 160), Color.Lime);
                 spriteBatch.DrawString(font, "depth: " + player1.depthLayer, new Vector2(400, 180), Color.Lime);
-                
                 spriteBatch.DrawString(font, "acceleration: " + player1.acceleration, new Vector2(400, 200), Color.Lime);
                 spriteBatch.DrawString(font, "boxcheck: " + player1.boxcheck, new Vector2(400, 240), Color.Lime);
                 spriteBatch.DrawString(font, "Speed: " + player1.physics.speed, new Vector2(400, 260), Color.Lime);
-
-
                 spriteBatch.DrawString(font, "JumpHeight: " + player1.physics.jumpHeight, new Vector2(400, 40), Color.Pink);
                 spriteBatch.DrawString(font, "jump Direction: " + player1.jumpDirection, new Vector2(0, 300), Color.Black);
+                spriteBatch.DrawString(font, "prevDirection: " + player1.input.prevDirection, new Vector2(0, 340), Color.Black);
                 spriteBatch.DrawString(font, "inputDirection: " + player1.input.direction, new Vector2(0, 400), Color.Black);
                 spriteBatch.DrawString(font, "dustCloud active: " + dustCloud.active, new Vector2(0, 440), Color.Black);
-
-
                 spriteBatch.DrawString(font, "direction: " + player1.direction, new Vector2(0, 500), Color.Black);
-
                 spriteBatch.DrawString(font, "collide: " + player1.physics.collide, new Vector2(0, 530), Color.Black);
-                spriteBatch.DrawString(font, "bottom - bottom: " + (player1.rect.Bottom - platform.rect.Bottom), new Vector2(0, 560), Color.Black);
+                
+
                 if (beep.dialogue)
                 {
                     spriteBatch.Draw(this.Content.Load<Texture2D>("popup"), new Rectangle(300, 500, 800, 200), null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .01f);

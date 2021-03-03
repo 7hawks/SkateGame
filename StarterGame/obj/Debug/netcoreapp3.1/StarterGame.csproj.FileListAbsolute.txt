@@ -93,3 +93,4 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetPush.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platforms\rail.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platforms\railLonger.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetRefactor.xnb

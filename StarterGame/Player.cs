@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 
 namespace StarterGame
@@ -8,31 +6,22 @@ namespace StarterGame
     public class Player : GameObject
     {
         public int wreckFrame;
-        public int trickframe = 3;
+        public int trickframe = 3; // 3rd frame is where kickflip animation starts
         public PhysicsComponent physics;
         public InputComponent input;
         public bool boxcheck;
-        private bool toggle;
         public float acceleration = 0;
-
         public double interval = 100;
         public double timer = 0f;
-        private double grindTimer = 0f;
-
         public Wreck wreck;
         public int coinCount;
         private const int width = 20;
         public const int characterHeight = 31;
         public Direction direction;
         public float depthLayer = .1f;
-
-
         //public Rectangle shadow;
-
         public State state;
         public TrickState trickState;
-
-
         public int startPosition;
 
         public Direction jumpDirection;
@@ -42,7 +31,6 @@ namespace StarterGame
             wreckFrame = 0;
             physics = new PhysicsComponent();
             input = inputComponent;
-            toggle = false;
             coinCount = 0;
             trickState = TrickState.None;
             direction = Direction.Right;
@@ -89,19 +77,7 @@ namespace StarterGame
                 }
                 physics.CollissionCheck(rect, p.rect);
             }
-/*            if (!player.Intersects(coll.block))
-            {
-                acceleration = 4;
-               // friction = .00029f;
-                friction = .00149f;
-            }*/
-            
-/*            if (trickState == TrickState.Grinding || (player.Right > coll.block.Left && player.Bottom > coll.block.Top + 110))
-            {
-                depthLayer = .1f;
-            }
-            else
-                depthLayer = .3f;*/
+
         }
 
 /*        private void RampCheck(Rectangle ramp)
@@ -190,24 +166,7 @@ namespace StarterGame
             {
                 case TrickState.Kickflip:
                     return new Rectangle(trickframe * 23, 62, width, characterHeight);
-/*                case TrickState.Grinding:
-                    grindTimer += elapsedTime;
 
-                    if (grindTimer > interval)
-                    {
-                        if (!toggle)
-                        {
-                            toggle = true;
-                        }
-                        else
-                            toggle = false;
-                        grindTimer = 0f;
-                    }
-                    if (!toggle)
-                    {
-                        return new Rectangle(width * (int)direction, 0, width, characterHeight);
-                    }
-                    return new Rectangle(width * (int)direction, 95, width, characterHeight);*/
             }
             switch (state)
             {
