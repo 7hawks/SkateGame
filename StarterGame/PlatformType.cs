@@ -8,7 +8,8 @@ namespace StarterGame
     {
         Rail,
         Stairs,
-        Ramp,
+        RampLeft,
+        RampRight,
         Box
     }
 }

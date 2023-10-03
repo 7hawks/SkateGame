@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/trickSound2.wav</SourceFile>
   <SourceTime>2021-02-08T15:04:51.3608178-08:00</SourceTime>
   <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/Content/trickSound2.xnb</DestFile>
-  <DestTime>2021-02-08T15:05:13.5471653-08:00</DestTime>
+  <DestTime>2021-10-03T22:12:28.7287002-07:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

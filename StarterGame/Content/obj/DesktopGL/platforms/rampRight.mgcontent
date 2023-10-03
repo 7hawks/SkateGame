@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSpritesheetGrind.png</SourceFile>
-  <SourceTime>2021-02-09T18:16:07.1798045-08:00</SourceTime>
-  <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/Content/skaterSpritesheetGrind.xnb</DestFile>
-  <DestTime>2021-02-09T18:16:55.961504-08:00</DestTime>
+  <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platforms/rampRight.png</SourceFile>
+  <SourceTime>2021-03-08T09:47:03.6245765-08:00</SourceTime>
+  <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/platforms/rampRight.xnb</DestFile>
+  <DestTime>2021-03-08T09:48:58.5819351-08:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

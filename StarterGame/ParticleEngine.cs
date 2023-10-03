@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -49,6 +47,7 @@ namespace StarterGame
             Vector2 velocity = new Vector2(
                                     1f * (float)(random.NextDouble() * 2 - 1),
                                     1f * (float)(random.NextDouble() * 2 - 1));
+
             float angle = 0;
             float angularVelocity = 0.1f * (float)(random.NextDouble() * 2 - 1);
             Color color = new Color(

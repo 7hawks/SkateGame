@@ -10,8 +10,8 @@ namespace StarterGame
 
         public Menu()
         {
-            startButton = new Rectangle(500, 430, Utilities.Scale(59, 3.75), Utilities.Scale(27, 3.75));
-            exitButton = new Rectangle(500, 600, Utilities.Scale(59, 3.75), Utilities.Scale(27, 3.75));
+            startButton = new Rectangle(Game1.view.width/2 - 70, 430, Utilities.Scale(59, 3.75), Utilities.Scale(27, 3.75));
+            exitButton = new Rectangle(Game1.view.width/2 - 70, 600, Utilities.Scale(59, 3.75), Utilities.Scale(27, 3.75));
         }
 
         public bool StartCheck()

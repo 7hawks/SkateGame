@@ -5,11 +5,11 @@ namespace StarterGame
 {
     public class Player : GameObject
     {
+        public int points;
         public int wreckFrame;
         public int trickframe = 3; // 3rd frame is where kickflip animation starts
         public PhysicsComponent physics;
         public InputComponent input;
-        public bool boxcheck;
         public float acceleration = 0;
         public double interval = 100;
         public double timer = 0f;
@@ -54,7 +54,7 @@ namespace StarterGame
            // return false;
         }*/
 
-        public void HandlePosition(double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
+        public void Update(double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
             input.Update(this);
             physics.Update(this, elapsedTime, platforms, dustCloud);
@@ -63,96 +63,21 @@ namespace StarterGame
 
             foreach(Platform p in platforms)
             {
-                if (rect.Intersects(p.rect))
-                {
-                    if (p.type == PlatformType.Ramp)
+               // if (rect.Intersects(p.rect))
+               // {
+                    if (p.type == PlatformType.RampRight || p.type == PlatformType.RampLeft)
                     {
                         // CollissionCheck(coll.block);
-                        physics.RampCheck(this, p.rect);                     
+                        physics.RampCheck(this, p.rect, p.type);
                     }
-                    if (p.type == PlatformType.Box)
-                    {
-                        //BoxCheck(p);
-                    }
-                }
-                physics.CollissionCheck(rect, p.rect);
+                    else
+                        physics.CollissionCheck(direction, rect, p.rect);
             }
-
         }
 
-/*        private void RampCheck(Rectangle ramp)
-        {
-            if (player.Intersects(ramp))
-            {
-                if (direction != Direction.Left && player.Right > ramp.Left + 100 && player.Left < ramp.Right - 1)
-                {
-                    if (player.Right > ramp.Right)
-                    {
-                        Move(Direction.Right);
-                        return;
-                    }
-                    if (direction == Direction.Right)
-                    {
-                        acceleration += .25f;
-                       // friction += .25f;
-                        Move(Direction.DownRight);
-                    }
-                }
-                if (direction == Direction.Left && (player.Left + 5) < ramp.Right)
-                {
-                    //acceleration *= .85f;
-                    if (friction < maxFriction)
-                    {
-                        friction *= 1.05f;
-                    }
-                    //Move(Direction.UpLeft);
-                    Move(Direction.Up);
-                    Move(Direction.Left);
-                    Move(Direction.Left);
-                }
-                if (player.Bottom - ramp.Top >= 100 && player.Bottom - ramp.Top <= 110)
-                {
-                    collide = Direction.Down;
-                }
-                if ((player.Top - ramp.Bottom) <= -80 && (player.Top - ramp.Bottom) >= -90)
-                {
-                    collide = Direction.Up;
-                }
-            }
-        }*/
-
-/*        private void CollissionCheck(Rectangle block)
-        {
-            if (rect.Intersects(block))
-            {
-                if (rect.Bottom > block.Top && rect.Top < block.Bottom)
-                {
-                    if ((((rect.Right - physics.speed) - block.Left) <= bounds) && ((rect.Right - physics.speed) - block.Left) >= -bounds)
-                    {
-                        collide = Direction.Right;
-                        return;
-                    }
-                    else if (((rect.Left - block.Right) <= bounds) && (rect.Left - block.Right) >= -bounds)
-                    {
-                        collide = Direction.Left;
-                        return;
-                    }
-                }
-
-                if ((rect.Bottom - block.Top >= 8 && rect.Bottom - block.Top <= 20) || rect.Bottom - block.Bottom > -200 && rect.Bottom - block.Bottom < 0)
-                {
-                    collide = Direction.Down;
-                    return;
-                }
-                if ((rect.Top - block.Bottom) <= -60 && (rect.Top - block.Bottom) >= -60)
-                {
-                    collide = Direction.Up;
-                    return;
-                }
-            }
-            collide = Direction.None;
-        }*/
-
+        /// <summary>
+        /// Reset the player position to start
+        /// </summary>
         public void Reset()
         {
             physics.speed = 0;
@@ -166,7 +91,6 @@ namespace StarterGame
             {
                 case TrickState.Kickflip:
                     return new Rectangle(trickframe * 23, 62, width, characterHeight);
-
             }
             switch (state)
             {
@@ -179,7 +103,10 @@ namespace StarterGame
                 case State.Popped:
                     return new Rectangle(21, 31, width, characterHeight);
                 case State.Jumping:
-                    return new Rectangle(0, 31, width, characterHeight);
+                    if (jumpDirection == Direction.Right)
+                        return new Rectangle(0, 31, width, characterHeight);
+                    else
+                        return new Rectangle(41, 31, width, characterHeight);
             }
 
             if (input.direction == Direction.None)

@@ -45,7 +45,6 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\ramp.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\ramp2.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\rampBigger.xnb
-C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\kickflipSpritesheet.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSpritesheet2.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\realSkateLand.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\realSkatePop.xnb
@@ -67,7 +66,6 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\stairs.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzBg2.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\lightLayer.xnb
-C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSpritesheetGrind.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\grindSound.ogg
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\grindSound.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\stair10.xnb
@@ -83,7 +81,6 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\JanouTouryuumon.ogg
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\JanouTouryuumon.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\popup.xnb
-C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetWreck.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\startMenu\exitButton.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\startMenu\startButton.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\startMenu\titleCard.xnb
@@ -93,4 +90,6 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetPush.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platforms\rail.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platforms\railLonger.xnb
-C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetRefactor.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzLargeTest.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\platforms\rampRight.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzLarge.xnb

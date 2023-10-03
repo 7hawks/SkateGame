@@ -9,6 +9,7 @@ namespace StarterGame
     
     public class PhysicsComponent : IGameComponent
     {
+        private bool slow;
         const int bounds = 3;
         public int jumpSpeed;
         public float speed;
@@ -22,6 +23,8 @@ namespace StarterGame
         private double timer;
         public Direction collide;
         public Direction slowDownDirection;
+        private double slowDown;
+        public bool checkViewBox;
 
         public PhysicsComponent()
         {
@@ -38,8 +41,14 @@ namespace StarterGame
         ///     Iterates through the game world platforms to check if player collides
         /// </summary>
         /// <param name="block"></param>
-        public void CollissionCheck(Rectangle playerRect, Rectangle block)
+        public void CollissionCheck(Direction direction, Rectangle playerRect, Rectangle block)
         {
+            if (playerRect.Left < block.Right && playerRect.Right > block.Left && direction == Direction.Up && (playerRect.Top - block.Bottom) <= -60 && (playerRect.Top - block.Bottom) >= -75)
+            {
+                collide = Direction.Up;
+                return;
+            }
+
             if (playerRect.Intersects(block))
             {
                 if (playerRect.Bottom > block.Top && playerRect.Top < block.Bottom)
@@ -61,13 +70,26 @@ namespace StarterGame
                     collide = Direction.Down;
                     return;
                 }
-                if ((playerRect.Top - block.Bottom) <= -60 && (playerRect.Top - block.Bottom) >= -60)
+
+                if (direction == Direction.UpLeft && (playerRect.Top - block.Bottom) <= -40 && (playerRect.Top - block.Bottom) >= -80)
                 {
-                    collide = Direction.Up;
+                    collide = Direction.UpLeft;
+                    return;
+                }
+
+                if (direction == Direction.UpRight && (playerRect.Top - block.Bottom) <= -40 && (playerRect.Top - block.Bottom) >= -80)
+                {
+                    collide = Direction.UpRight;
                     return;
                 }
             }
             collide = Direction.None;
+        }
+
+        public void Decelerate(Player player)
+        {
+            if (player.acceleration > 0 && player.acceleration > .00001) { player.acceleration *= .95f; }
+            if (speed > 0 && speed > .0001) { speed *= .9f; }
         }
 
         public void UpdateGrind(Player player, List<Platform> platforms)
@@ -77,10 +99,6 @@ namespace StarterGame
 
             if (player.rect.Y >= player.startPosition + jumpHeight)
             {
-/*                foreach (Platform p in platforms)
-                {
-                    p.intersects = false;
-                }*/
                 Game1.landingSound.Play();
                 player.state = State.Grounded;
                 MediaPlayer.Pause();
@@ -96,6 +114,7 @@ namespace StarterGame
                 }
             }
             player.state = State.Jumping;
+            jumpHeight = 0;
         }
 
         public void Update(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
@@ -133,29 +152,30 @@ namespace StarterGame
                         return;
                     }
 
-                    UpdateJump(player, elapsedTime, platforms, dustCloud);
-
-                    
-
-                    foreach ( Platform p in platforms)
+                    if (slow)
                     {
-                        if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0) { Fall(player); }
+                        SlowDown(player, elapsedTime);
                     }
+
+                    UpdateJump(player, elapsedTime, platforms, dustCloud);
+                    // this block needs work in order for the LEDGE DROP to work
+
+/*                    foreach ( Platform p in platforms) // check if player is going from one level platform to another
+                    {
+                        if (player.rect.Intersects(p.rect))
+                        {
+                            if (player.direction == Direction.Right && player.rect.Right > p.rect.Right && jumpHeight == 0) { Fall(player); }
+                        } 
+                    }*/
 
                     if (speed > 0 && player.input.direction == Direction.None)  // decelerate when not actively moving
                     {
-                        if (player.acceleration > 0 && player.acceleration > .00001) { player.acceleration *= .95f; }
-
-                        if (speed > 0 && speed > .0001) { speed *= .9f; }
+                        Decelerate(player);
+/*                        if (player.acceleration > 0 && player.acceleration > .00001) { player.acceleration *= .95f; }
+                        if (speed > 0 && speed > .0001) { speed *= .9f; }*/
                     }
 
                     if (Keyboard.GetState().IsKeyDown(Keys.Space)) { Push(player, elapsedTime); }
-
-/*                    if (player.input.direction != player.direction && speed > 0) 
-                    { 
-                        Move()
-                        return; 
-                    }*/
 
                     if (player.input.direction == Direction.None && player.acceleration > .01)
                     {
@@ -186,14 +206,15 @@ namespace StarterGame
                     else
                         Move(player, player.input.direction);
                     break;
-                case State.SlowDown:
-
+                case State.Wreck:
+                    Move(player, Direction.None);
                     break;
             }
         }
 
         public void UpdateJump(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
+            
             if ((player.state == State.Grounded || player.state == State.Grinding) && (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.K)))
             {
                 Game1.popSound.Play();
@@ -203,16 +224,8 @@ namespace StarterGame
 
             switch (player.state)
             {
-/*                case State.Grounded:
-                    if (Mouse.GetState().RightButton == ButtonState.Pressed)
-                    {
-                        Game1.popSound.Play();
-                        player.state = State.Popped;
-                        return;
-                    }
-                    break;*/
-
                 case State.Jumping:
+                    Decelerate(player);
                     CheckKickFlip(player, elapsedTime, platforms);   
 
                     player.rect.Y += jumpSpeed;
@@ -244,13 +257,11 @@ namespace StarterGame
             }
         }
 
-
         public void Initialize()
         {
             throw new NotImplementedException();
         }
 
-       
         private void CalcSpeed(Player player)
         {
             if (speed + player.acceleration > maxSpeed)
@@ -262,113 +273,119 @@ namespace StarterGame
                 speed += player.acceleration;
         }
 
-        public double EaseOutQuad (double t, double b, double c, double d)
-        {
-            t /= d;
-            return -c * t * (t - 2) + b;
-        }
+        //public double EaseOutQuad (double t, double b, double c, double d)
+        //{
+        //    t /= d;
+        //    return -c * t * (t - 2) + b;
+        //}
 
         private void Move(Player player, Direction inputDirection)
         {
-/*            if (player.state == State.Wreck)
-                return;*/
-
+            if (player.physics.collide == inputDirection)
+                return;
 
             if (player.state != State.Jumping && player.input.direction != Direction.None && player.acceleration + .4f < maxAcceleration)
             {
                 player.acceleration += .4f;
             }
+            // This handles a change of direction and resistance
+            if (inputDirection != player.direction && speed > 2)
+            {
+                if (inputDirection == Direction.Left && player.direction == Direction.Right)
+                {
+                    player.acceleration = 0;
+                    speed -= .2f;
 
-            // This is the problem chunk for deceleration
-            /*            if (inputDirection != player.direction && speed > 2)
-                        {
-                            if (inputDirection == Direction.Left && player.direction == Direction.Right)
-                            {
-                                speed -= .2f;
+                    player.rect.X += (int)speed;
 
-                                player.rect.X += (int)speed;
-                                player.rect.X += (int)speed;
+                    return;
+                }
+                else if (inputDirection == Direction.Right && player.direction == Direction.Left)
+                {
+                    player.acceleration = 0;
+                    speed -= .2f;
 
-                                return;
-                            }
-                            else if (inputDirection == Direction.Right && player.direction == Direction.Left)
-                            {
-                                Decelerate();
+                    player.rect.X -= (int)speed;
 
-                                speed -= .2f;
+                    return;
+                }
+                player.direction = inputDirection;
+            }
 
-                                player.rect.X -= (int)speed;
-                                player.rect.X -= (int)speed;
-
-                                return;
-                            }
-                            player.direction = inputDirection;
-                        }*/
+            if (CheckViewBox(player, inputDirection)) // check if player has reached the bounds of screen
+                return;
 
             CalcSpeed(player);
-
+                
             switch (inputDirection)
             {
                 case Direction.Up:
-                    if (player.rect.Top <= 100)
-                        return;
-
                     player.rect.Y -= (int)speed;
                     break;
 
                 case Direction.Right:
-                    if (player.rect.Right >= Game1.view.width)
-                        return;
-
                     player.rect.X += (int)speed;
                     player.jumpDirection = Direction.Right;
                     break;
 
                 case Direction.Down:
-                    if (player.rect.Bottom >= Game1.view.height)
-                        return;
-                    if (player.physics.collide == inputDirection)
-                    {
-                        return;
-                    }
-
                     player.rect.Y += (int)speed; ;
                     break;
                 case Direction.Left:
-                    if (player.physics.collide == inputDirection)
-                    {
-                        return;
-                    }
-
-                    if (player.rect.Left <= 0)
-                        return;
-
                     player.rect.X -= (int)speed;
                     player.jumpDirection = Direction.Left;
                     break;
                 case Direction.UpLeft:
-                    if (player.physics.collide == inputDirection)
-                    {
-                        Move(player, Direction.Up);
-                        return;
-                    }
                     player.rect.Y -= (int)(speed * .7f);
                     player.rect.X -= (int)(speed * .7f);
+                    player.jumpDirection = Direction.UpLeft;
                     break;
                 case Direction.UpRight:
                     player.rect.Y -= (int)(speed * .7f);
                     player.rect.X += (int)(speed * .7f);
+                    player.jumpDirection = Direction.UpRight;
                     break;
                 case Direction.DownRight:
                     player.rect.Y += (int)(speed * .7f);
                     player.rect.X += (int)(speed * .7f);
+                    player.jumpDirection = Direction.DownRight;
                     break;
                 case Direction.DownLeft:
                     player.rect.Y += (int)(speed * .7f);
                     player.rect.X -= (int)(speed * .7f);
+                    player.jumpDirection = Direction.DownLeft;
                     break;
             }
             player.direction = inputDirection;
+        }
+
+        // This method checks if the player has reached the bounds of the game view
+        private bool CheckViewBox(Player player, Direction inputDirection)
+        {
+            if (inputDirection == Direction.Right || inputDirection == Direction.UpRight || inputDirection == Direction.DownRight)
+            {
+                if (player.rect.Right >= Game1.view.width)
+                    return true;
+            }
+
+            if (inputDirection == Direction.Left || inputDirection == Direction.UpLeft || inputDirection == Direction.DownLeft)
+            {
+                if (player.rect.Left <= 0)
+                    return true;
+            }
+
+            if (inputDirection == Direction.Down || inputDirection == Direction.DownLeft || inputDirection == Direction.DownRight)
+            {
+                if (player.rect.Bottom >= Game1.view.height)
+                    return true;
+            }
+
+            if (inputDirection == Direction.Up || inputDirection == Direction.UpLeft || inputDirection == Direction.UpRight)
+            {
+                if (player.rect.Top <= 200) 
+                    return true;
+            }
+            return false;
         }
 
         private void Push(Player player, double elapsedTime)
@@ -393,21 +410,22 @@ namespace StarterGame
                 pushFrame = 0;
                 timer = 0;
                 player.state = State.Grounded;
-                maxSpeed = 8;
-                player.state = State.Grounded;
+                slow = true;
+
                 player.rect.Width = (75);
                 player.rect.Height = (120);
+            }
+        }
 
-/*                if (maxSpeed > 8)
-                {
-                    maxSpeed *= .9f;
-                    return;
-                }
-                else
-                {
+        private void SlowDown(Player player, double elapsedTime)
+        {
+            slowDown += elapsedTime;
 
-                }*/
-
+            if (slowDown > 400)
+            {
+                slowDown = 0;
+                maxSpeed = 8;
+                slow = false;
             }
         }
 
@@ -417,7 +435,6 @@ namespace StarterGame
             {
                 player.state = State.Jumping;
                 jumpSpeed = -16;
-                player.acceleration = 0;
                 player.startPosition = player.rect.Y - jumpHeight;
             }
         }
@@ -428,11 +445,9 @@ namespace StarterGame
             {
                 player.state = State.Jumping;
                 jumpSpeed = -4;
-
                 player.startPosition = player.rect.Y - jumpHeight;
             }
         }
-
 
         public void CheckGrind(Player player, List<Platform> platforms)
         {
@@ -458,7 +473,6 @@ namespace StarterGame
             }
         }
 
-
         private void CheckKickFlip(Player player, double elapsedTime, List<Platform> platforms)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.F))
@@ -482,44 +496,41 @@ namespace StarterGame
             }
         }
 
-        public void RampCheck(Player player, Rectangle ramp)
+        public void RampCheck(Player player, Rectangle ramp, PlatformType type)
         {
             if (player.rect.Intersects(ramp))
             {
-                player.boxcheck = true;
-                if (player.direction != Direction.Left && player.rect.Right > ramp.Left + 100 && player.rect.Left < ramp.Right - 1)
+                switch (type)
                 {
-                    if (player.rect.Right > ramp.Right)
-                    {
-                        Move(player, Direction.Right);
-                        return;
-                    }
-                    if (player.direction == Direction.Right)
-                    {
-                        player.acceleration += .25f;
-                        // friction += .25f;
-                        Move(player, Direction.DownRight);
-                    }
-                }
-                if (player.direction == Direction.Left && (player.rect.Left + 5) < ramp.Right)
-                {
-                    //acceleration *= .85f;
-                    if (friction < maxFriction)
-                    {
-                        friction *= 1.05f;
-                    }
-                    //Move(Direction.UpLeft);
-                    Move(player, Direction.Up);
-                    Move(player, Direction.Left);
-                    Move(player, Direction.Left);
-                }
-                if (player.rect.Bottom - ramp.Top >= 100 && player.rect.Bottom - ramp.Top <= 110)
-                {
-                    collide = Direction.Down;
-                }
-                if ((player.rect.Top - ramp.Bottom) <= -80 && (player.rect.Top - ramp.Bottom) >= -90)
-                {
-                    collide = Direction.Up;
+                    case PlatformType.RampRight:
+                        if (player.direction != Direction.Left && player.rect.Right > ramp.Left + 100 && player.rect.Left < ramp.Right - 1)
+                        {
+                            if (player.rect.Right > ramp.Right)
+                            {
+                                Move(player, Direction.Right);
+                                return;
+                            }
+                            if (player.direction == Direction.Right)
+                            {
+                                player.acceleration += .25f;
+                                Move(player, Direction.DownRight);
+                            }
+                        }
+                        if (player.direction == Direction.Left && (player.rect.Left + 5) < ramp.Right)
+                        {
+                            Decelerate(player);
+                            if (friction < maxFriction)
+                            {
+                                friction *= 1.05f;
+                            }
+                            Move(player, Direction.Up);
+                            Move(player, Direction.Left);
+                            // Move(player, Direction.Left);
+                        }
+
+                        break;
+                    case PlatformType.RampLeft:
+                        break;
                 }
             }
         }
