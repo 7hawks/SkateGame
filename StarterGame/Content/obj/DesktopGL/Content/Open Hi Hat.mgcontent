@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/Open Hi Hat.wav</SourceFile>
   <SourceTime>2020-02-26T06:40:53.1780168-08:00</SourceTime>
   <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/Content/Open Hi Hat.xnb</DestFile>
-  <DestTime>2021-02-08T19:43:24.0687393-08:00</DestTime>
+  <DestTime>2023-10-04T09:30:30.4673759-07:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>
