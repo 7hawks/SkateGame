@@ -1,0 +1,8 @@
+C:\Users\caleb\source\repos\StarterGame\SkateGame\bin\Debug\netstandard2.0\SkateGame.deps.json
+C:\Users\caleb\source\repos\StarterGame\SkateGame\bin\Debug\netstandard2.0\SkateGame.dll
+C:\Users\caleb\source\repos\StarterGame\SkateGame\bin\Debug\netstandard2.0\SkateGame.pdb
+C:\Users\caleb\source\repos\StarterGame\SkateGame\obj\Debug\netstandard2.0\SkateGame.csprojAssemblyReference.cache
+C:\Users\caleb\source\repos\StarterGame\SkateGame\obj\Debug\netstandard2.0\SkateGame.AssemblyInfoInputs.cache
+C:\Users\caleb\source\repos\StarterGame\SkateGame\obj\Debug\netstandard2.0\SkateGame.AssemblyInfo.cs
+C:\Users\caleb\source\repos\StarterGame\SkateGame\obj\Debug\netstandard2.0\SkateGame.dll
+C:\Users\caleb\source\repos\StarterGame\SkateGame\obj\Debug\netstandard2.0\SkateGame.pdb

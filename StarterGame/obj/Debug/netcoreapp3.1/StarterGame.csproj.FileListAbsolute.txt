@@ -88,8 +88,10 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runt
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\soft_oal.dll
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SDL2.dll
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\soft_oal.dll
+C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.csprojAssemblyReference.cache
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.AssemblyInfoInputs.cache
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.AssemblyInfo.cs
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.csproj.CopyComplete
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.dll
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.pdb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet2.xnb

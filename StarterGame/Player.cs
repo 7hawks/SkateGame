@@ -7,6 +7,8 @@ namespace StarterGame
     {
         public int wreckFrame;
         public int trickframe = 3; // 3rd frame is where kickflip animation starts
+        public int idleFrame = 9;
+        //private double interval = 250;
         public PhysicsComponent physics;
         public InputComponent input;
         public bool boxcheck;
@@ -41,18 +43,44 @@ namespace StarterGame
             //this.shadow = new Rectangle(0, 0, 60, 96);
         }
 
-/*        private void BoxCheck(Platform box)
+        public double Animate(double elapsedTime)
         {
-            if (rect.Left - box.rect.Right < 10 && (direction == Direction.Left || direction == Direction.DownLeft || direction == Direction.UpLeft))
+/*            if (direction != Direction.None)
             {
-                collide = direction;
-                return;
+                state = State.Grounded;
+                return timer = 0f;
+               
+            }*/
+
+
+            timer += elapsedTime;
+
+            if (timer > 500)
+            {
+                idleFrame++;
+                if (idleFrame > 11)
+                {
+                    idleFrame = 9;
+                }
+                timer = 0f;
             }
-           // else
-              //  collide = Direction.None;
-            //boxcheck = false;
-           // return false;
-        }*/
+            return timer;
+        }
+
+
+
+        /*        private void BoxCheck(Platform box)
+                {
+                    if (rect.Left - box.rect.Right < 10 && (direction == Direction.Left || direction == Direction.DownLeft || direction == Direction.UpLeft))
+                    {
+                        collide = direction;
+                        return;
+                    }
+                   // else
+                      //  collide = Direction.None;
+                    //boxcheck = false;
+                   // return false;
+                }*/
 
         public void HandlePosition(double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
@@ -77,8 +105,9 @@ namespace StarterGame
                 }
                 physics.CollissionCheck(rect, p.rect);
             }
-
         }
+
+
 
 /*        private void RampCheck(Rectangle ramp)
         {
@@ -170,6 +199,8 @@ namespace StarterGame
             }
             switch (state)
             {
+                case State.Idle:
+                    return new Rectangle(20 * idleFrame, 0, width, 33);
                 case State.Grinding:
                     return new Rectangle(width * (int)jumpDirection, 0, width, characterHeight);
                 case State.Push:

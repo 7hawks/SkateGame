@@ -7,6 +7,7 @@ namespace StarterGame
     public enum GameState
     {
         Menu,
-        Game
+        Game,
+        Pause
     }
 }

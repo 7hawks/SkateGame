@@ -79,7 +79,7 @@ namespace StarterGame
             font = Content.Load<SpriteFont>("fonts");
             player1 = new Player(new InputComponent(), 0, 200, 75, 120);
             beep = new NonPlayableCharacter(Content.Load<Texture2D>("beepBeanSpritesheet"), 600, 200, Utilities.Scale(20, scale), Utilities.Scale(28, scale));
-            //dustCloud = new DustCloud(Utilities.Scale(28, scale), Utilities.Scale(15, scale));
+           // dustCloud = new DustCloud(Utilities.Scale(28, scale), Utilities.Scale(15, scale));
             dustCloud = new DustCloud();
 
          //   collissionObj = new CollissionObject(this.Content.Load<Texture2D>("stair10"), PlatformType.Rail);
@@ -155,7 +155,7 @@ namespace StarterGame
 
             spriteBatch.Draw(this.Content.Load<Texture2D>("vaperzBg2"), new Rectangle(0, 0, 1200, 720), null, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 1);
             spriteBatch.Draw(this.Content.Load<Texture2D>("lightLayer"), new Rectangle(0, 0, 1200, 720), null, Color.White * .15f, 0, new Vector2(0, 0), SpriteEffects.None, .01f);
-            // spriteBatch.Draw(this.Content.Load<Texture2D>("shadow"), player1.shadow, Color.White);                            shadow code here
+             //spriteBatch.Draw(this.Content.Load<Texture2D>("shadow"), player1.shadow, Color.White);                            shadow code here
            
             if (state == GameState.Game)
             {
@@ -177,8 +177,10 @@ namespace StarterGame
                     spriteBatch.Draw(this.Content.Load<Texture2D>("coinSpritesheet"), c.rect, c.Sprite(), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, .2f);
                 }
 
-                spriteBatch.Draw(this.Content.Load<Texture2D>("skaterSheetPush"), player1.rect, player1.Sprite(gameTime.ElapsedGameTime.TotalMilliseconds), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, player1.depthLayer);
+                spriteBatch.Draw(this.Content.Load<Texture2D>("skaterSheet2"), player1.rect, player1.Sprite(gameTime.ElapsedGameTime.TotalMilliseconds), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, player1.depthLayer);
                 spriteBatch.Draw(this.Content.Load<Texture2D>("beepBeanSpritesheet"), beep.rect, beep.Sprite(), Color.White, 0, new Vector2(0, 0), SpriteEffects.None, player1.depthLayer);
+
+
 
                 spriteBatch.DrawString(font, "State: " + player1.state, new Vector2(0, 0), Color.Black);
                 spriteBatch.DrawString(font, "trickState: " + player1.trickState, new Vector2(0, 40), Color.Black);
@@ -194,10 +196,11 @@ namespace StarterGame
                 spriteBatch.DrawString(font, "jump Direction: " + player1.jumpDirection, new Vector2(0, 300), Color.Black);
                 spriteBatch.DrawString(font, "prevDirection: " + player1.input.prevDirection, new Vector2(0, 340), Color.Black);
                 spriteBatch.DrawString(font, "inputDirection: " + player1.input.direction, new Vector2(0, 400), Color.Black);
-                spriteBatch.DrawString(font, "dustCloud active: " + dustCloud.active, new Vector2(0, 440), Color.Black);
-                spriteBatch.DrawString(font, "direction: " + player1.direction, new Vector2(0, 500), Color.Black);
-                spriteBatch.DrawString(font, "collide: " + player1.physics.collide, new Vector2(0, 530), Color.Black);
-                
+           //     spriteBatch.DrawString(font, "dustCloud active: " + dustCloud.active, new Vector2(0, 440), Color.Black);
+                spriteBatch.DrawString(font, "idle frame: " + player1.idleFrame, new Vector2(0, 440), Color.Black);
+                /*                spriteBatch.DrawString(font, "direction: " + player1.direction, new Vector2(0, 500), Color.Black);
+                                spriteBatch.DrawString(font, "collide: " + player1.physics.collide, new Vector2(0, 530), Color.Black);*/
+                spriteBatch.DrawString(font, "timer: " + player1.physics.timer, new Vector2(0, 530), Color.Black);
 
                 if (beep.dialogue)
                 {

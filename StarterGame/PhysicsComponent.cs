@@ -19,9 +19,12 @@ namespace StarterGame
         public int jumpHeight { get; set; }
         public int pushFrame;
         private const int pushInterval = 100;
-        private double timer;
+        public double timer;
         public Direction collide;
         public Direction slowDownDirection;
+        private double interval = 250;
+        public int frame = 0;
+        //private double timer = 0f;
 
         public PhysicsComponent()
         {
@@ -117,6 +120,15 @@ namespace StarterGame
 
             switch (player.state)
             {
+                case State.Idle:
+                    if (player.input.direction != Direction.None)
+                    {
+                        player.state = State.Grounded;
+                        timer = 0f;
+                        return;
+                    }
+                    timer = player.Animate(elapsedTime);
+                    return;
                 case State.Jumping:
                     UpdateJump(player, elapsedTime, platforms, dustCloud);
                     CheckGrind(player, platforms);
@@ -126,7 +138,13 @@ namespace StarterGame
                         Move(player, player.jumpDirection); 
                     break;
                 case State.Grounded:
+                    if (timer > 1000 && player.direction == Direction.None)
+                    {
+                        player.state = State.Idle;
+                        return;
+                    }
 
+                    player.physics.timer += elapsedTime;
                     if(player.direction == Direction.None && player.input.direction == Direction.None && speed < .5)
                     {
                         speed = 0;
@@ -194,7 +212,7 @@ namespace StarterGame
 
         public void UpdateJump(Player player, double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
         {
-            if ((player.state == State.Grounded || player.state == State.Grinding) && (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.K)))
+            if ((player.state == State.Grounded || player.state == State.Grinding || player.state == State.Idle) && (Mouse.GetState().RightButton == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.K)))
             {
                 Game1.popSound.Play();
                 player.state = State.Popped;
@@ -371,6 +389,7 @@ namespace StarterGame
             player.direction = inputDirection;
         }
 
+        // updates pushFrame for animation
         private void Push(Player player, double elapsedTime)
         {
             player.acceleration = 8;
@@ -392,7 +411,7 @@ namespace StarterGame
             {
                 pushFrame = 0;
                 timer = 0;
-                player.state = State.Grounded;
+              //  player.state = State.Grounded;
                 maxSpeed = 8;
                 player.state = State.Grounded;
                 player.rect.Width = (75);
@@ -410,6 +429,8 @@ namespace StarterGame
 
             }
         }
+
+
 
         private void Jump(Player player)
         {

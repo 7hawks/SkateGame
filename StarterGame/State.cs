@@ -5,6 +5,7 @@ namespace StarterGame
     {
         Grinding,
         Grounded,
+        Idle,
         Jumping, 
         Popped,
         Push,

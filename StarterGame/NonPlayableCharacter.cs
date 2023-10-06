@@ -6,7 +6,7 @@ namespace StarterGame
 {
     public class NonPlayableCharacter : GameObject
     {
-        private double interval = 250;
+        private double interval = 500;
         public int frame = 0;
         private double timer = 0f;
         public bool mute;
