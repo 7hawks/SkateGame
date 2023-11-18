@@ -7,7 +7,7 @@ namespace StarterGame
 {
     public class Wreck
     {
-        private const int endFrame = 7;
+        private const int endFrame = 13;
         private const double interval = 100;
         private double timer;
         public int frame { get; set; }
@@ -24,6 +24,10 @@ namespace StarterGame
 
             if (timer > interval)
             {
+                if (frame == 2)
+                {
+                    frame += 2;
+                }
                 frame++;
                 timer = 0f;
             }
@@ -33,9 +37,18 @@ namespace StarterGame
         {
             if (frame > endFrame)
             {
+               // player.width = 20;
                 frame = 0;
-                player.Reset();
-                return State.Grounded;
+
+                if (player.busted)
+                {
+                    player.ResetHard();
+                }
+                else
+                {
+                    player.Reset();
+                    return State.Grounded;
+                }
             }
             if (playerState != State.Wreck && Keyboard.GetState().IsKeyDown(Keys.R))
             {
@@ -43,6 +56,7 @@ namespace StarterGame
             }
             else if (playerState == State.Wreck)
             {
+                
                 Animate(elapsedTime);
                 return State.Wreck;
             }

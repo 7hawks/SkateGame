@@ -5,19 +5,23 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/808clap.wav</File>
-    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/grindSound.mp3</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/grindSound.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/Hi Hat 1.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/JanouTouryuumon.mp3</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/realSkateLand.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/realSkatePop.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/audio/wreckSound.wav</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/backgroundNoSky.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bananaPeel.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/beepBeanSpritesheet.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/boomboxSheet.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/coinSpritesheet.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/decorations/dustCloudSheet.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/fonts.spritefont</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/Hi Hat 2.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/Kick.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/kickflipSpritesheet.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/kickflipText-export.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/lightLayer.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/ollieAir.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/olliePop.png</File>
@@ -29,14 +33,19 @@
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platforms/rail.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/platforms/railLonger.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/popup.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/powerlines.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/ramp.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/ramp2.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/rampBigger.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/Roland-SC-88-Orchestra-Hit.wav</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/securityGuard.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/securityGuard-Sheet.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/shadow.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skatePop.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skatePop2.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheet2.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheet3.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheet4.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetPush.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetRefactor.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetWreck.png</File>
@@ -52,10 +61,21 @@
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/trickSound2.wav</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/vaperzBg.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/vaperzBg2.png</File>
+    <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/vaperzEdit.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/volume.png</File>
     <File>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/yellowPixel.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

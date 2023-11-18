@@ -1,3 +1,6 @@
+C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.csprojAssemblyReference.cache
+C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.AssemblyInfoInputs.cache
+C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.AssemblyInfo.cs
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\808clap.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\grindSound.ogg
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\grindSound.xnb
@@ -50,6 +53,7 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\SkaterDownRight.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\SkaterLeft.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet2.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetPush.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetRefactor.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheetWIP.xnb
@@ -71,9 +75,11 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Cont
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\trickSound2.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzBg.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzBg2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\vaperzEdit.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\volume.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\yellowPixel.xnb
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\StarterGame.exe
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\audio\grindSound.wav
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\StarterGame.deps.json
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\StarterGame.runtimeconfig.json
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\StarterGame.runtimeconfig.dev.json
@@ -88,10 +94,16 @@ C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runt
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\soft_oal.dll
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SDL2.dll
 C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\soft_oal.dll
-C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.csprojAssemblyReference.cache
-C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.AssemblyInfoInputs.cache
-C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.AssemblyInfo.cs
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.csproj.CopyComplete
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.dll
 C:\Users\caleb\source\repos\StarterGame\StarterGame\obj\Debug\netcoreapp3.1\StarterGame.pdb
-C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet3.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\powerlines.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\boomboxSheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\boomboxSheet2.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\backgroundNoSky.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\skaterSheet4.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\securityGuard.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\bananaPeel.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\securityGuard-Sheet.xnb
+C:\Users\caleb\source\repos\StarterGame\StarterGame\bin\Debug\netcoreapp3.1\Content\kickflipText-export.xnb

@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/Roland-SC-88-Orchestra-Hit.wav</SourceFile>
   <SourceTime>2021-02-08T10:40:20.3628199-08:00</SourceTime>
   <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/Roland-SC-88-Orchestra-Hit.xnb</DestFile>
-  <DestTime>2023-10-04T13:18:23.3085997-07:00</DestTime>
+  <DestTime>2023-11-16T00:49:10.9436361-08:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

@@ -19,11 +19,11 @@
 /processorParam:Quality=Best
 /build:808clap.wav
 
-#begin audio/grindSound.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
+#begin audio/grindSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:audio/grindSound.mp3
+/build:audio/grindSound.wav
 
 #begin audio/Hi Hat 1.wav
 /importer:WavImporter
@@ -55,6 +55,30 @@
 /processorParam:Quality=Best
 /build:audio/wreckSound.wav
 
+#begin backgroundNoSky.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:backgroundNoSky.png
+
+#begin bananaPeel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bananaPeel.png
+
 #begin beepBeanSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -66,6 +90,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:beepBeanSpritesheet.png
+
+#begin boomboxSheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:boomboxSheet.png
 
 #begin coinSpritesheet.png
 /importer:TextureImporter
@@ -121,6 +157,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:kickflipSpritesheet.png
+
+#begin kickflipText-export.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:kickflipText-export.png
 
 #begin lightLayer.png
 /importer:TextureImporter
@@ -248,6 +296,18 @@
 /processorParam:TextureFormat=Color
 /build:popup.png
 
+#begin powerlines.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:powerlines.png
+
 #begin ramp.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -290,6 +350,30 @@
 /processorParam:Quality=Best
 /build:Roland-SC-88-Orchestra-Hit.wav
 
+#begin securityGuard.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:securityGuard.png
+
+#begin securityGuard-Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:securityGuard-Sheet.png
+
 #begin shadow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -326,7 +410,7 @@
 /processorParam:TextureFormat=Color
 /build:skaterSheet2.png
 
-#begin skaterSheet2.png
+#begin skaterSheet3.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -336,7 +420,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:skaterSheet2.png
+/build:skaterSheet3.png
+
+#begin skaterSheet4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:skaterSheet4.png
 
 #begin skaterSheetPush.png
 /importer:TextureImporter
@@ -499,6 +595,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:vaperzBg2.png
+
+#begin vaperzEdit.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:vaperzEdit.png
 
 #begin volume.png
 /importer:TextureImporter

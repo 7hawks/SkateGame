@@ -1,14 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace StarterGame
 {
     public class Player : GameObject
     {
+        public bool busted = false;
+        public int initialX;
+        public int initialY;
         public int wreckFrame;
-        public int trickframe = 3; // 3rd frame is where kickflip animation starts
+        public int trickframe = 2; // 3rd frame is where kickflip animation starts
         public int idleFrame = 9;
-        //private double interval = 250;
         public PhysicsComponent physics;
         public InputComponent input;
         public bool boxcheck;
@@ -17,19 +20,48 @@ namespace StarterGame
         public double timer = 0f;
         public Wreck wreck;
         public int coinCount;
-        private const int width = 20;
+        public int width = 20;
         public const int characterHeight = 31;
         public Direction direction;
         public float depthLayer = .1f;
-        //public Rectangle shadow;
-        public State state;
+        private State _state;
         public TrickState trickState;
-        public int startPosition;
+        public int startPositionY;
+        public Rectangle wreckSprite;
 
         public Direction jumpDirection;
+        private AudioManager audioManager;
+        public float height = 32;
+        public float heightScaled = 32 * (float)3.75;
 
-        public Player(InputComponent inputComponent, int x, int y, int width, int height):base(x, y, width, height)
+        public State state
         {
+            get { return _state; }
+            set { SetState(value); }
+        }
+
+        private void SetState(State value)
+        {
+/*          if(value == State.Wreck)
+            {
+                this.audioManager.PlayWreckSound();
+            }*/
+            _state = value;
+        }
+
+/*        private void SetState(State newState, AudioManager audioManager)
+        {
+            // Validation or additional logic can be added here
+            // Use newState and additionalParameter as needed
+            _state = newState;
+        }*/
+
+
+public Player(AudioManager audioManager, InputComponent inputComponent, int x, int y, int width, int height):base(x, y, width, height)
+        {
+            initialX = x;
+            initialY = y;
+            this.audioManager = audioManager;
             wreckFrame = 0;
             physics = new PhysicsComponent();
             input = inputComponent;
@@ -41,18 +73,15 @@ namespace StarterGame
             
             wreck = new Wreck();
             //this.shadow = new Rectangle(0, 0, 60, 96);
+          //  wreck = new Rectangle(player1.rect.X, player1.rect.Y, 120, 120);
         }
+
+
+
+
 
         public double Animate(double elapsedTime)
         {
-/*            if (direction != Direction.None)
-            {
-                state = State.Grounded;
-                return timer = 0f;
-               
-            }*/
-
-
             timer += elapsedTime;
 
             if (timer > 500)
@@ -82,10 +111,10 @@ namespace StarterGame
                    // return false;
                 }*/
 
-        public void HandlePosition(double elapsedTime, List<Platform> platforms, DustCloud dustCloud)
+        public void HandlePosition(double elapsedTime, List<Platform> platforms, DustCloud dustCloud, AudioManager audioManager, HudManager hud)
         {
             input.Update(this);
-            physics.Update(this, elapsedTime, platforms, dustCloud);
+            physics.Update(this, elapsedTime, platforms, dustCloud, audioManager, hud);
 
             if (state == State.Jumping || state == State.Grinding) { return; }
 
@@ -189,13 +218,26 @@ namespace StarterGame
             state = State.Grounded;
         }
 
+        public void ResetHard()
+        {
+            physics.speed = 0;
+            direction = Direction.Right;
+            state = State.Grounded;
+            rect.X = initialX;
+            rect.Y = initialY;
+            busted = false;
+        }
+
         public Rectangle Sprite(double elapsedTime)
         {
             switch (trickState)
             {
                 case TrickState.Kickflip:
-                    return new Rectangle(trickframe * 23, 62, width, characterHeight);
-
+                    if(direction == Direction.Right || direction == Direction.DownRight || direction == Direction.UpRight)
+                    {
+                        return new Rectangle(trickframe * 23, 62, width, characterHeight);
+                    }
+                    return new Rectangle(trickframe * 23, 158, width, characterHeight);
             }
             switch (state)
             {
@@ -206,11 +248,20 @@ namespace StarterGame
                 case State.Push:
                     return new Rectangle(physics.pushFrame * 32, 126, 32, 32);
                 case State.Wreck:
-                    return new Rectangle(wreck.frame * 20, 95, width, characterHeight);
+                   // this.width = 32;
+                    return new Rectangle(wreck.frame * 32, 190, 32, 32);
                 case State.Popped:
-                    return new Rectangle(21, 31, width, characterHeight);
+                    if (direction == Direction.Right || direction == Direction.DownRight || direction == Direction.UpRight || direction == Direction.None && input.prevDirection == Direction.Right)
+                    {
+                        return new Rectangle(21, 31, width, characterHeight);
+                    }
+                    return new Rectangle(21 *4, 31, width, characterHeight);
                 case State.Jumping:
-                    return new Rectangle(0, 31, width, characterHeight);
+                    if (direction == Direction.Right || direction == Direction.DownRight || direction == Direction.UpRight || direction == Direction.None && input.prevDirection == Direction.Right)
+                    {
+                        return new Rectangle(0, 31, width, characterHeight);
+                    }
+                        return new Rectangle(21 * 3, 31, width, characterHeight);
             }
 
             if (input.direction == Direction.None)
@@ -220,5 +271,6 @@ namespace StarterGame
 
             return new Rectangle(width * (int)direction, 0, width, characterHeight);
         }
+
     }
 }

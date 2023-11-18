@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skaterSheetWreck.png</SourceFile>
-  <SourceTime>2023-10-04T09:30:15.8368812-07:00</SourceTime>
+  <SourceTime>2023-10-05T17:24:22.370989-07:00</SourceTime>
   <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/skaterSheetWreck.xnb</DestFile>
-  <DestTime>2023-10-04T13:18:24.1638763-07:00</DestTime>
+  <DestTime>2023-11-16T00:49:11.8692764-08:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

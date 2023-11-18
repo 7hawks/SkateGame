@@ -11,6 +11,7 @@ namespace StarterGame
         public string message { get; set; }
         private bool isOpen;
 
+
         public Popup(int x, int y, string inputMessage)
         {
             isOpen = false;

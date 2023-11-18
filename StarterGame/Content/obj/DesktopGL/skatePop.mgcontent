@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/skatePop.wav</SourceFile>
   <SourceTime>2021-01-31T22:23:21.6166155-08:00</SourceTime>
   <DestFile>C:/Users/caleb/source/repos/StarterGame/StarterGame/Content/bin/DesktopGL/skatePop.xnb</DestFile>
-  <DestTime>2023-10-04T13:18:23.6736482-07:00</DestTime>
+  <DestTime>2023-11-16T00:49:11.3623461-08:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54-07:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>
